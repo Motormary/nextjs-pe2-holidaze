@@ -1,7 +1,26 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
-  /* config options here */
-};
+  // reactStrictMode: false,
+  logging: {
+    fetches: {
+      fullUrl: true, // Displays fetch path + cache
+    },
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "http",
+        hostname: "192.168.10.132",
+        port: "8000",
+        pathname: "/assets/**",
+        search: "",
+      },
+    ],
+  },
+  // experimental: {
+  //   reactCompiler: true // Gotta go fast 🦔
+  // }
+}
 
-export default nextConfig;
+export default nextConfig
