@@ -28,11 +28,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} relative flex min-h-svh flex-col items-center antialiased [&_*]:outline`}
       >
-        <nav className="w-full max-md:hidden">
-          <div className="container mx-auto flex justify-between px-4 outline-black">
+        <nav className="w-full py-1.5 max-md:hidden">
+          <div className="container mx-auto flex justify-between px-4">
             <Link prefetch={false} href="/">
               <picture>
-                <img src="public/vercel.svg" alt="logo" />
+                <img className="max-h-8" src="logo.png" alt="logo" />
               </picture>
             </Link>
             <ul className="flex gap-4">
