@@ -43,7 +43,7 @@ export default function RootLayout({
           </div>
         </nav>
         {children}
-        <nav className="sticky bottom-0 z-50 w-full outline-black">
+        <nav className="bg-background sticky bottom-0 z-50 w-full outline-black">
           <div className="container mx-auto px-4">bottom nav</div>
         </nav>
       </body>
