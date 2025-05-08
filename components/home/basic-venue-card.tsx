@@ -1,5 +1,6 @@
 import { cn, numToDollarString } from "@/lib/utils"
 import { Star } from "lucide-react"
+import Link from "next/link"
 import altImg from "public/alt.svg"
 
 type props = {
@@ -24,18 +25,19 @@ type props = {
 }
 
 export default async function BasicVenueCard({ data }: { data?: props }) {
-  const imageUrl = data?.media?.[0].url ?? altImg.url
+  const imageUrl = data?.media?.[0]?.url ?? altImg.url
 
   return (
     <div className="flex h-[334px] flex-col gap-2.5 overflow-hidden [&_p]:mr-1 [&_p]:line-clamp-1">
-      <picture className="bg-muted overflow-hidden rounded-t-lg">
+      <picture className="bg-muted relative overflow-hidden rounded-t-lg border">
+        <Link href={`/venue/${data?.id}`} className="absolute inset-0 z-10" />
         <img
           className={cn(
             imageUrl && "object-cover object-center",
-            "h-[236px] w-full font-light underline",
+            `h-[236px] w-full bg-[url('/alt.svg')] bg-contain bg-center bg-no-repeat font-light text-transparent underline`,
           )}
           src={imageUrl}
-          alt={data?.media?.[0].alt}
+          alt={data?.media?.[0]?.alt}
         />
       </picture>
       <div className="flex justify-between">
@@ -45,7 +47,7 @@ export default async function BasicVenueCard({ data }: { data?: props }) {
         >
           {data?.location.address}, {data?.location.city}
         </p>
-        <span className="flex items-center gap-0.5 text-sm">
+        <span className="flex items-center gap-0.5 text-sm select-none">
           <Star className="size-4 fill-amber-300 stroke-amber-500" />
           {data?.rating.toFixed(1)}
         </span>

@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import "./globals.css"
 import Link from "next/link"
-import { UserProvider } from "@/hooks/use-user"
+import { UserProvider } from "@/components/user-provider"
 import MobileNav from "@/components/mobile-nav"
 
 const geistSans = Geist({
@@ -28,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} relative flex min-h-svh flex-col items-center antialiased [&_*]:outline`}
+        className={`${geistSans.variable} ${geistMono.variable} [&_*]: relative flex min-h-svh flex-col items-center antialiased outline`}
       >
         <UserProvider>
           <nav className="w-full py-1.5 max-md:hidden">

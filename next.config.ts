@@ -10,11 +10,12 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
+        protocol: "https",
+        hostname: "**", //! Insecure, don't do this with an actual app.
+      },
+      {
         protocol: "http",
-        hostname: "192.168.10.132",
-        port: "8000",
-        pathname: "/assets/**",
-        search: "",
+        hostname: "**", //! Insecure, don't do this with an actual app.
       },
     ],
   },
