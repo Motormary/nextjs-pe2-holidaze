@@ -1,7 +1,3 @@
-type props = {
-  params: string
-}
-
-export default async function LoginPage({ params }: props) {
+export default async function LoginPage() {
   return <div>LoginPage</div>
 }

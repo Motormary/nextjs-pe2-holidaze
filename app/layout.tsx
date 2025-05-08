@@ -34,8 +34,8 @@ export default function RootLayout({
           <nav className="w-full py-1.5 max-md:hidden">
             <div className="container mx-auto flex justify-between px-4">
               <Link prefetch={false} href="/">
-                <picture>
-                  <img className="max-h-8" src="logo.png" alt="logo" />
+                <picture className="size-8">
+                  <img className="h-8" src="logo.png" alt="logo" />
                 </picture>
               </Link>
               <ul className="flex gap-4">

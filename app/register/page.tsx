@@ -1,7 +1,3 @@
-type props = {
-  params: string
-}
-
-export default async function RegisterPage({ params }: props) {
+export default async function RegisterPage() {
   return <div>RegisterPage</div>
 }
