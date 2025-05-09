@@ -31,14 +31,17 @@ export default async function BasicVenueCard({ data }: { data?: props }) {
     <div className="flex h-[334px] flex-col gap-2.5 overflow-hidden [&_p]:mr-1 [&_p]:line-clamp-1">
       <picture className="bg-muted relative overflow-hidden rounded-t-lg border">
         <Link href={`/venue/${data?.id}`} className="absolute inset-0 z-10" />
+        <source srcSet={imageUrl} />
         <img
+          loading="lazy"
           className={cn(
             imageUrl && "object-cover object-center",
-            `h-[236px] w-full bg-[url('/alt.svg')] bg-contain bg-center bg-no-repeat font-light text-transparent underline`,
+            `h-[236px] w-full font-light underline`,
           )}
-          src={imageUrl}
+          src="/alt.svg"
           alt={data?.media?.[0]?.alt}
         />
+        <source className="object-contain object-center" srcSet="/alt.svg" />
       </picture>
       <div className="flex justify-between">
         <p

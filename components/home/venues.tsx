@@ -14,19 +14,19 @@ export default async function Venues({
   const query = q ? `/search?q=${q}&page=${page}` : `?page=${page}`
   const res = await fetch(`https://v2.api.noroff.dev/holidaze/venues${query}`, {
     method: "GET",
-    cache: "force-cache",
     next: {
-      revalidate: 3,
-      tags: ["venues"],
+      revalidate: 10,
     },
   })
+
   const venues = await res.json()
+
   return (
     <>
       <div className="grid grid-cols-[repeat(auto-fill,minmax(270px,1fr))] gap-5">
         {venues.data?.length ? (
-          venues.data.map((venue: any, index: number) => (
-            <BasicVenueCard key={index} data={venue} />
+          venues.data.map((venue: any) => (
+            <BasicVenueCard key={venue.id} data={venue} />
           ))
         ) : (
           <p>No results</p>
