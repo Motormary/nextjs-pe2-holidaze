@@ -10,15 +10,18 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu"
+import { useScrolledFromTop } from "@/hooks/use-scroll"
 import { cn } from "@/lib/utils"
+import { format } from "date-fns"
 import { Loader2, Search, UserCircle, X } from "lucide-react"
 import { AnimatePresence, motion } from "motion/react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { ChangeEvent, memo, useRef, useState, useTransition } from "react"
+import { DateRange } from "react-day-picker"
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
+import { Calendar } from "./ui/calendar"
 import { useUser } from "./user-provider"
-import { useScrolledFromTop } from "@/hooks/use-scroll"
 
 function TopNav() {
   const router = useRouter()
@@ -30,6 +33,9 @@ function TopNav() {
   const [isPending, startTransition] = useTransition()
   const [query, setQuery] = useState("")
   const [open, setOpen] = useState(query ? true : false)
+  const [date, setDate] = useState<DateRange | undefined>(undefined)
+  const [adults, setAdults] = useState(0)
+  const [childrens, setChildren] = useState(0)
 
   function handleInput(event: ChangeEvent<HTMLInputElement>) {
     setQuery(event.currentTarget.value)
@@ -48,8 +54,21 @@ function TopNav() {
 
   function handleQuery() {
     startTransition(() => {
-      router.push(`?q=${query}`)
+      router.push(`/?q=${query}`)
     })
+  }
+
+  function handleGuests(event: ChangeEvent<HTMLInputElement>) {
+    const value = event.target.value
+    const isNum = /^\d+$/.test(value)
+
+    if (event.currentTarget.id === "adults") {
+      if (!value) setAdults(0)
+      else if (isNum) setAdults(Number(value))
+    } else {
+      if (!value) setChildren(0)
+      if (isNum) setChildren(Number(value))
+    }
   }
 
   return (
@@ -91,6 +110,127 @@ function TopNav() {
         )}
       >
         <NavigationMenuList>
+          <NavigationMenuItem>
+            <NavigationMenuTrigger
+              onClick={(e) => e.preventDefault()}
+              className="h-11"
+            >
+              <div className="flex min-w-[130px] flex-col">
+                Fellowship
+                <span className="text-muted-foreground text-xs">
+                  {adults
+                    ? childrens
+                      ? `Adults: ${adults} - Children: ${childrens}`
+                      : `Adults: ${adults}`
+                    : "Add guests"}
+                </span>
+              </div>
+            </NavigationMenuTrigger>
+            <NavigationMenuContent className="bg-transparent">
+              <div className="flex w-[300px] flex-col items-center justify-center gap-4 p-2">
+                <div className="flex w-full justify-between">
+                  <p>
+                    Adults
+                    <span className="text-muted-foreground block text-xs">
+                      Ages 18+
+                    </span>
+                  </p>
+                  <div className="flex gap-1">
+                    <Button
+                      onClick={() => setAdults(adults ? adults - 1 : 0)}
+                      size="icon"
+                      className="rounded-full transition-colors"
+                    >
+                      -
+                    </Button>
+                    <Input
+                      id="adults"
+                      placeholder="0"
+                      onChange={handleGuests}
+                      value={adults}
+                      className="w-10 overflow-clip border-transparent p-0 text-center outline-transparent"
+                    />
+                    <Button
+                      onClick={() => setAdults(adults + 1)}
+                      size="icon"
+                      className="rounded-full transition-colors"
+                    >
+                      +
+                    </Button>
+                  </div>
+                </div>
+                <div className="flex w-full justify-between">
+                  <p>
+                    Children
+                    <span className="text-muted-foreground block text-xs">
+                      Ages 0-17
+                    </span>
+                  </p>
+                  <div className="flex gap-1">
+                    <Button
+                      disabled={!adults}
+                      onClick={() => setChildren(childrens ? childrens - 1 : 0)}
+                      size="icon"
+                      className="rounded-full transition-colors"
+                    >
+                      -
+                    </Button>
+                    <Input
+                      disabled={!adults}
+                      value={childrens}
+                      onChange={handleGuests}
+                      placeholder="0"
+                      className="w-10 overflow-clip border-transparent p-0 text-center outline-transparent"
+                    />
+                    <Button
+                      disabled={!adults}
+                      onClick={() => setChildren(childrens + 1)}
+                      size="icon"
+                      className="rounded-full transition-colors"
+                    >
+                      +
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
+          <NavigationMenuItem>
+            <NavigationMenuTrigger
+              onClick={(e) => e.preventDefault()}
+              className="h-11"
+            >
+              <div className="flex flex-col">
+                Date
+                <span className="text-muted-foreground min-w-[165px] text-xs">
+                  {date?.from ? (
+                    date.to ? (
+                      <>
+                        {format(date.from, "LLL dd, y")} -{" "}
+                        {format(date.to, "LLL dd, y")}
+                      </>
+                    ) : (
+                      <>{format(date.from, "LLL dd, y")} - Check out</>
+                    )
+                  ) : (
+                    "Check in / Check out"
+                  )}
+                </span>
+              </div>
+            </NavigationMenuTrigger>
+            <NavigationMenuContent>
+              <div>
+                <Calendar
+                  initialFocus
+                  mode="range"
+                  defaultMonth={date?.from}
+                  selected={date}
+                  onSelect={setDate}
+                  numberOfMonths={2}
+                />
+              </div>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
           <NavigationMenuItem
             onClick={(e) => e.preventDefault()}
             className="h-13 w-52 content-center overflow-hidden px-1"
@@ -148,38 +288,7 @@ function TopNav() {
               )}
             </AnimatePresence>
           </NavigationMenuItem>
-          <NavigationMenuItem>
-            <NavigationMenuTrigger
-              onClick={(e) => e.preventDefault()}
-              className="h-11"
-            >
-              <div className="flex flex-col">
-                Date
-                <span className="text-muted-foreground text-xs">
-                  Check in / Check out
-                </span>
-              </div>
-            </NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <div className="w-[450px]">date</div>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
-          <NavigationMenuItem>
-            <NavigationMenuTrigger
-              onClick={(e) => e.preventDefault()}
-              className="h-11"
-            >
-              <div className="flex flex-col">
-                Fellowship
-                <span className="text-muted-foreground text-xs">
-                  Add guests
-                </span>
-              </div>
-            </NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <div className="w-[450px]">guests</div>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
+
           <NavigationMenuItem asChild>
             <Button
               disabled={isPending}
