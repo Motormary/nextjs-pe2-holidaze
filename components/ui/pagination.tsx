@@ -8,9 +8,9 @@ import {
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
-import { buttonVariants } from "@/components/ui/button"
-import Link from "next/link"
+import { Button, buttonVariants } from "@/components/ui/button"
 import { VariantProps } from "class-variance-authority"
+import { useRouter } from "next/navigation"
 
 interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
@@ -50,27 +50,36 @@ PaginationItem.displayName = "PaginationItem"
 
 type PaginationLinkProps = {
   isActive?: boolean
+  href: string
 } & Pick<ButtonProps, "size"> &
-  React.ComponentProps<typeof Link>
+  React.ComponentProps<typeof Button>
 
 const PaginationLink = ({
   className,
   isActive,
   size = "icon",
+  href,
   ...props
-}: PaginationLinkProps) => (
-  <Link
-    aria-current={isActive ? "page" : undefined}
-    className={cn(
-      buttonVariants({
-        variant: isActive ? "default" : "ghost",
-        size,
-      }),
-      className,
-    )}
-    {...props}
-  />
-)
+}: PaginationLinkProps) => {
+  const router = useRouter()
+  const [isPending, startTransition] = React.useTransition()
+  function handleClick() {
+    startTransition(() => {
+      router.push(href)
+    })
+  }
+  return (
+    <Button
+      data-pending={isPending ? "" : undefined}
+      onClick={handleClick}
+      aria-current={isActive ? "page" : undefined}
+      variant={isActive ? "default" : "ghost"}
+      size={size}
+      className={cn("hover:cursor-pointer", className)}
+      {...props}
+    />
+  )
+}
 PaginationLink.displayName = "PaginationLink"
 
 const PaginationPrevious = ({

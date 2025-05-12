@@ -1,9 +1,9 @@
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import "./globals.css"
-import Link from "next/link"
 import { UserProvider } from "@/components/user-provider"
 import MobileNav from "@/components/mobile-nav"
+import TopNav from "@/components/top-nav"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,20 +31,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} [&_*]: relative flex min-h-svh flex-col items-center antialiased outline`}
       >
         <UserProvider>
-          <nav className="w-full py-1.5 max-md:hidden">
-            <div className="container mx-auto flex justify-between px-4">
-              <Link prefetch={false} href="/">
-                <picture className="size-8">
-                  <img className="h-8" src="logo.png" alt="logo" />
-                </picture>
-              </Link>
-              <ul className="flex gap-4">
-                <li>Home</li>
-                <li>Venues</li>
-                <li>Profile</li>
-              </ul>
-            </div>
-          </nav>
+          <TopNav />
           {children}
           <MobileNav />
         </UserProvider>

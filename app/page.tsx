@@ -1,5 +1,6 @@
 import Venues from "@/components/home/venues"
 import VenuesLoading from "@/components/home/venues-loading"
+
 import { Suspense } from "react"
 
 type props = {
@@ -10,9 +11,7 @@ export default async function Home({ searchParams }: props) {
   const queries = await searchParams
 
   return (
-    <main className="container grow px-4">
-      <h1>Home</h1>
-      <div className="max-md:hidden">search bar</div>
+    <main className="container grow p-4 peer-[[data-search]]:animate-pulse has-[[data-pending]]:animate-pulse">
       <Suspense fallback={<VenuesLoading />}>
         <Venues searchParams={queries} />
       </Suspense>
