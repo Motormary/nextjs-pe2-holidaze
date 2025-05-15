@@ -51,14 +51,17 @@ function TopNav() {
     else setOpen(false)
   }
   function handleClear() {
-    startTransition(() => {
-      setQuery("")
-      setDate(undefined)
-      setAdults(0)
-      setChildren(0)
-      setOpen(false)
-      router.push("/")
-    })
+    setQuery("")
+    setDate(undefined)
+    setAdults(0)
+    setChildren(0)
+
+    if (defaultQueryValue) {
+      startTransition(() => {
+        setOpen(false)
+        router.push("/")
+      })
+    }
   }
 
   function handleQuery() {

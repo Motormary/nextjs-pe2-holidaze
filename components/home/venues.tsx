@@ -21,22 +21,23 @@ export default async function Venues({
 
   const venues = await res.json()
 
-  return (
-    <>
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(270px,1fr))] gap-5">
-        {venues.data?.length ? (
-          venues.data.map((venue: any) => (
+  if (venues.data.length)
+    return (
+      <>
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(270px,1fr))] gap-5">
+          {venues.data.map((venue: any) => (
             <BasicVenueCard key={venue.id} data={venue} />
-          ))
-        ) : (
-          <div className="text-muted-foreground h-full py-20 text-center">
-            No results
-          </div>
-        )}
-      </div>
-      <div className="flex justify-center py-4">
-        <MetaPagination meta={venues.meta} />
-      </div>
-    </>
+          ))}
+        </div>
+        <div className="flex justify-center py-4">
+          <MetaPagination meta={venues.meta} />
+        </div>
+      </>
+    )
+
+  return (
+    <div className="text-muted-foreground h-full py-20 text-center">
+      No results
+    </div>
   )
 }

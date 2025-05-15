@@ -67,6 +67,20 @@ function MobileNav() {
     })
   }
 
+  function handleClear() {
+    setQuery("")
+    setDate(undefined)
+    setAdults(0)
+    setChildren(0)
+
+    if (defaultQueryValue) {
+      startTransition(() => {
+        setOpen(false)
+        router.push("/")
+      })
+    }
+  }
+
   return (
     <div
       data-search={isPending ? "" : undefined}
@@ -103,14 +117,14 @@ function MobileNav() {
         </div>
       </nav>
       <Drawer open={open} onOpenChange={setOpen}>
-        <DrawerContent className="overflow-y-scroll">
+        <DrawerContent>
           <DrawerHeader>
             <DrawerTitle>Find your next destination</DrawerTitle>
             <DrawerDescription className="sr-only">
               Fill out the search field and press search
             </DrawerDescription>
           </DrawerHeader>
-          <div className="flex flex-col gap-6 p-4">
+          <div className="flex flex-col gap-6 overflow-y-auto p-4">
             <div className="flex flex-col gap-2">
               <Label htmlFor="q">Venue</Label>
               <Input
@@ -230,6 +244,12 @@ function MobileNav() {
               ) : (
                 "Search"
               )}
+            </Button>
+            <Button
+              disabled={!query && !date && !adults && !childrens}
+              onClick={handleClear}
+            >
+              Clear filters
             </Button>
           </div>
         </DrawerContent>
