@@ -339,10 +339,8 @@ function TopNav() {
                   onClick={handleQuery}
                   type="submit"
                   title="Search"
-                  className={cn(
-                    scrolled ? "size-8" : "size-9",
-                    "cursor-pointer rounded-full lg:ml-1",
-                  )}
+                  size="icon"
+                  className={"cursor-pointer rounded-full lg:ml-1"}
                 >
                   <AnimatePresence mode="popLayout">
                     {!isPending ? (
