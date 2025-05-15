@@ -12,6 +12,11 @@ export default async function Home({ searchParams }: props) {
 
   return (
     <main className="container grow p-4 peer-[[data-search]]:animate-pulse has-[[data-pending]]:animate-pulse">
+      {queries.q ? (
+        <h3 className="pb-2 text-sm">
+          Showing results for &apos;{queries.q}&apos;
+        </h3>
+      ) : null}
       <Suspense fallback={<VenuesLoading />}>
         <Venues searchParams={queries} />
       </Suspense>

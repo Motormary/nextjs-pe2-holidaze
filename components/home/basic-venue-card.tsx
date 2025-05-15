@@ -50,7 +50,12 @@ export default async function BasicVenueCard({ data }: { data?: props }) {
         >
           {data?.location.address}, {data?.location.city}
         </p>
-        <span className="flex items-center gap-0.5 text-sm select-none">
+        <span
+          className={cn(
+            data?.rating === 0 ? "hidden" : "flex",
+            "items-center gap-0.5 text-sm select-none",
+          )}
+        >
           <Star className="size-4 fill-amber-300 stroke-amber-500" />
           {data?.rating.toFixed(1)}
         </span>

@@ -29,7 +29,9 @@ export default async function Venues({
             <BasicVenueCard key={venue.id} data={venue} />
           ))
         ) : (
-          <p>No results</p>
+          <div className="text-muted-foreground h-full py-20 text-center">
+            No results
+          </div>
         )}
       </div>
       <div className="flex justify-center py-4">
