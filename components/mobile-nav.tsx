@@ -1,11 +1,16 @@
 "use client"
 
 import { useUser } from "@/components/user-provider"
-import { Compass, UserCircle } from "lucide-react"
-import Form from "next/form"
+import { cn } from "@/lib/utils"
+import { format } from "date-fns/format"
+import { CalendarIcon, Compass, Loader2, UserCircle } from "lucide-react"
 import Link from "next/link"
-import { ChangeEvent, memo, useState } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
+import { ChangeEvent, memo, useState, useTransition } from "react"
+import { DateRange } from "react-day-picker"
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 import { Button } from "./ui/button"
+import { Calendar } from "./ui/calendar"
 import {
   Drawer,
   DrawerContent,
@@ -15,17 +20,22 @@ import {
 } from "./ui/drawer"
 import { Input } from "./ui/input"
 import { Label } from "./ui/label"
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
 import SearchIcon from "./ui/search-icon"
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
-import { DateRange } from "react-day-picker"
-import { Calendar } from "./ui/calendar"
 
 function MobileNav() {
   const [open, setOpen] = useState(false)
   const [date, setDate] = useState<DateRange | undefined>(undefined)
   const [adults, setAdults] = useState(0)
   const [childrens, setChildren] = useState(0)
+  const searchParams = useSearchParams()
+  const defaultQueryValue = searchParams.get("q")
 
+  const [isPending, startTransition] = useTransition()
+  const [query, setQuery] = useState<string | undefined>(
+    defaultQueryValue ? defaultQueryValue : "",
+  )
+  const router = useRouter()
   const user = useUser()
   const userLink = user ? `/user/${user.id}` : "/login"
 
@@ -46,8 +56,22 @@ function MobileNav() {
     }
   }
 
+  function handleInput(event: ChangeEvent<HTMLInputElement>) {
+    setQuery(event.currentTarget.value)
+  }
+
+  function handleQuery() {
+    startTransition(() => {
+      setOpen(false)
+      router.push(`/?q=${query}`)
+    })
+  }
+
   return (
-    <div className="bg-background sticky bottom-0 z-50 w-full drop-shadow-[0px_5px_8px_gray] md:hidden">
+    <div
+      data-search={isPending ? "" : undefined}
+      className="bg-background sticky bottom-0 z-50 w-full drop-shadow-[0px_5px_8px_gray] md:hidden"
+    >
       <nav className="h-[59px]">
         <div className="container mx-auto grid h-full grid-cols-3 items-center gap-6 px-4">
           <Link href="/" className="flex flex-col items-center text-xs">
@@ -86,23 +110,55 @@ function MobileNav() {
               Fill out the search field and press search
             </DrawerDescription>
           </DrawerHeader>
-          <Form action="/" className="flex flex-col gap-6 p-4">
+          <div className="flex flex-col gap-6 p-4">
             <div className="flex flex-col gap-2">
               <Label htmlFor="q">Venue</Label>
-              <Input name="q" />
-            </div>
-            <div className="flex flex-col items-center justify-center gap-2">
-              <Label htmlFor="calendar">Check in / Check out</Label>
-              <Calendar
-                id="calendar"
-                mode="range"
-                defaultMonth={date?.from}
-                selected={date}
-                onSelect={setDate}
-                numberOfMonths={1}
+              <Input
+                value={query}
+                onChange={handleInput}
+                placeholder="Polar Circle 3B"
+                name="q"
               />
             </div>
-            <div className="flex flex-col items-center justify-center gap-4 p-2">
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="calendar">Date</Label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant={"outline"}
+                    className={cn(
+                      "pl-3 text-left font-normal",
+                      !date && "text-muted-foreground",
+                    )}
+                  >
+                    {date?.from ? (
+                      date.to ? (
+                        <>
+                          {format(date.from, "LLL dd, y")} -{" "}
+                          {format(date.to, "LLL dd, y")}
+                        </>
+                      ) : (
+                        <>{format(date.from, "LLL dd, y")} - Check out</>
+                      )
+                    ) : (
+                      "Check in / Check out"
+                    )}
+                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="range"
+                    selected={date}
+                    onSelect={setDate}
+                    disabled={(date) =>
+                      date < new Date(new Date().setHours(0, 0, 0, 0))
+                    }
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+            <div className="flex flex-col items-center justify-center gap-4 py-2">
               <div className="flex w-full justify-between">
                 <p>
                   Adults
@@ -168,8 +224,14 @@ function MobileNav() {
                 </div>
               </div>
             </div>
-            <Button>Search</Button>
-          </Form>
+            <Button disabled={isPending} onClick={handleQuery}>
+              {isPending ? (
+                <Loader2 className="size-5 animate-spin" />
+              ) : (
+                "Search"
+              )}
+            </Button>
+          </div>
         </DrawerContent>
       </Drawer>
     </div>
