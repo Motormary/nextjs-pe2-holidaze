@@ -1,13 +1,7 @@
-async function getCurrentUser() {
-  return {
-    id: "123",
-    name: "John Doe",
-    email: "John@doe.com",
-    avatar: { url: "https://github.com/shadcn.png", alt: "aa" },
-  }
-}
+import { getCurrentUser } from "@/app/actions/user/get"
 
 export async function GET() {
-  const user = await getCurrentUser()
-  return Response.json(user)
+  const { data } = await getCurrentUser()
+
+  return Response.json(data?.data ?? null)
 }

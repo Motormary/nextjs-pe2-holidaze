@@ -27,9 +27,9 @@ import { useUser } from "./user-provider"
 
 function TopNav() {
   const router = useRouter()
-  const user = useUser()
+  const { user } = useUser()
   const inputRef = useRef<null | HTMLInputElement>(null)
-  const userLink = user ? `/user/${user.id}` : "/login"
+  const userLink = user ? `/user/${user.name}` : "/login"
   const scrolled = useScrolledFromTop(61)
   const searchParams = useSearchParams()
   const defaultQueryValue = searchParams.get("q")
@@ -93,11 +93,14 @@ function TopNav() {
       <motion.div
         animate={scrolled ? { height: "60px" } : { height: "142px" }}
         transition={{ bounceDamping: 8, duration: 0.5 }}
-        className="bg-background fixed top-0 z-50 flex w-full flex-col gap-2"
+        className={cn(
+          scrolled && "shadow-md",
+          "bg-background fixed top-0 z-50 flex w-full flex-col",
+        )}
       >
         <div
           className={cn(
-            "bg-background z-50 container mx-auto flex justify-between px-4 py-2",
+            "bg-background container mx-auto flex min-h-[60px] justify-between px-4 py-2",
           )}
         >
           <Link href="/" className="content-center">
@@ -106,38 +109,50 @@ function TopNav() {
             </picture>
           </Link>
           <ul className="flex items-center gap-4">
-            <li className="flex gap-4">
-              <Button className="text-sm" variant="ghost">
-                Add Venue
-              </Button>
-              <Link href={userLink} className="content-center">
-                {user ? (
-                  <Avatar className="h-[32px] w-[32px]">
-                    <AvatarImage src={user.avatar.url} alt={user.avatar.alt} />
-                    <AvatarFallback>
-                      <UserCircle className="stroke-primary size-8" />
-                    </AvatarFallback>
-                  </Avatar>
-                ) : (
-                  <UserCircle className="stroke-primary size-8" />
-                )}
+            {user ? (
+              <li className="flex gap-4">
+                <Button className="text-sm" variant="ghost">
+                  Add Venue
+                </Button>
+                <Link href={userLink} className="content-center">
+                  {user ? (
+                    <Avatar className="h-[32px] w-[32px]">
+                      <AvatarImage
+                        src={user?.avatar?.url}
+                        alt={user?.avatar?.alt}
+                      />
+                      <AvatarFallback>
+                        <UserCircle className="stroke-primary size-8" />
+                      </AvatarFallback>
+                    </Avatar>
+                  ) : (
+                    <UserCircle className="stroke-primary size-8" />
+                  )}
+                </Link>
+              </li>
+            ) : (
+              <Link
+                className={cn(buttonVariants({ variant: "ghost" }))}
+                href="/login"
+              >
+                Login
               </Link>
-            </li>
+            )}
           </ul>
         </div>
         <div
           className={cn(
             scrolled ? "outline-transparent" : "outline-muted",
-            "w-full outline transition-colors",
+            "mb-5 w-full outline transition-colors",
           )}
         />
         <motion.div
           style={{
             zIndex: 50,
           }}
-          animate={scrolled ? { translateY: "-65px" } : { translateY: "0px" }}
+          animate={scrolled ? { translateY: "-76px" } : { translateY: "0px" }}
           transition={{ bounceDamping: 8, duration: 0.5 }}
-          className="flex justify-center"
+          className="mx-auto"
         >
           <NavigationMenu>
             <NavigationMenuList>

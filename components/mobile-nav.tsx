@@ -36,8 +36,8 @@ function MobileNav() {
     defaultQueryValue ? defaultQueryValue : "",
   )
   const router = useRouter()
-  const user = useUser()
-  const userLink = user ? `/user/${user.id}` : "/login"
+  const { user } = useUser()
+  const userLink = user ? `/user/${user.name}` : "/login"
 
   function toggleDrawer() {
     setOpen(!open)

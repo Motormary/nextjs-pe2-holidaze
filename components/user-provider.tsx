@@ -1,36 +1,42 @@
 "use client"
 
+import { TYPE_USER } from "@/lib/definitions"
 import { createContext, useContext, useEffect, useState } from "react"
 
-type UserProps = {
-  id: string
-  name: string
-  email: string
-  avatar: {
-    url: string
-    alt: string
-  }
+// Update the context type to include a setter function
+type UserContextType = {
+  user: TYPE_USER | null
+  setUser: (user: TYPE_USER | null) => void
 }
 
-const UserContext = createContext<UserProps | null>(null)
+// Create context with a default value
+const UserContext = createContext<UserContextType>({
+  user: null,
+  setUser: () => {},
+})
 
 export function useUser() {
   return useContext(UserContext)
 }
 
 export function UserProvider({ children }: { children: React.ReactNode }) {
-  const [value, setValue] = useState<UserProps | null>(null)
+  const [user, setUser] = useState<TYPE_USER | null>(null)
 
   useEffect(() => {
     async function getUser() {
-      const user = await fetch("/api/user")
+      const userData = await fetch("/api/user")
         .then((res) => res.json())
         .catch(() => null)
 
-      setValue(user)
+      setUser(userData)
     }
     getUser()
   }, [])
 
-  return <UserContext.Provider value={value}>{children}</UserContext.Provider>
+  // Provide both the user value and the setter function
+  return (
+    <UserContext.Provider value={{ user, setUser }}>
+      {children}
+    </UserContext.Provider>
+  )
 }

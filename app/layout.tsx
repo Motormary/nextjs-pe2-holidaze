@@ -4,6 +4,7 @@ import "./globals.css"
 import { UserProvider } from "@/components/user-provider"
 import MobileNav from "@/components/mobile-nav"
 import TopNav from "@/components/top-nav"
+import { Toaster } from "sonner"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,6 +35,7 @@ export default function RootLayout({
           <TopNav />
           {children}
           <MobileNav />
+          <Toaster richColors />
         </UserProvider>
       </body>
     </html>
