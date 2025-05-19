@@ -10,12 +10,11 @@ export enum CacheOptions {
  * Add {+ username} to USER members of enum
  */
 export enum CacheTags {
-  ALL_LISTINGS = "listings",
-  LISTING = "listing-id-", //! + listing uuid
+  ALL_VENUES = "venues",
+  VENUE = "venue-id-", //! + listing uuid
   USER = "user-", //! + username
-  USER_LISTINGS = "user-listings-", //! + username
-  USER_BIDS = "user-bids-", //! + username
-  USER_WINS = "user-wins-", //! + username
+  USER_VENUES = "user-venues-", //! + username
+  USER_BOOKINGS = "user-bookings-", //! + username
 }
 
 export enum ErrorSource {
@@ -32,7 +31,34 @@ export enum Method {
   GET = "GET",
 }
 
-export type TYPE_META = {
+type TYPE_VENUE_META = {
+  wifi: boolean
+  parking: boolean
+  breakfast: boolean
+  pets: boolean
+}
+
+type TYPE_VENUE_LOC = {
+  address: string
+  city: string
+  zip: string
+  country: string
+  continent: string
+  lat: number
+  lng: number
+}
+
+type TYPE_BOOKING = {
+  id: string
+  dateFrom: string
+  dateTo: string
+  guests: number
+  created: string
+  updated: string
+  customer: TYPE_USER
+}
+
+export type TYPE_PAGINATION = {
   isFirstPage: boolean
   isLastPage: boolean
   currentPage: number
@@ -47,6 +73,8 @@ export type TYPE_MEDIA = {
   alt: string
 }
 
+// -------------------------
+
 export type TYPE_USER = {
   name: string
   email: string
@@ -54,13 +82,29 @@ export type TYPE_USER = {
   avatar: TYPE_MEDIA
   banner: TYPE_MEDIA
   venueManager: boolean
-  venues: any[] // TYPE_VENUES[]
-  bookings: any[] // TYPE_BOOKINGS[]
+  venues: TYPE_VENUE[]
+  bookings: TYPE_BOOKING[]
   _count: {
     venues: number
     bookings: number
   }
   accessToken: string | undefined | null
+}
+
+export type TYPE_VENUE = {
+  id: string
+  name: string
+  description: string
+  media: TYPE_MEDIA[]
+  price: number
+  maxGuests: number
+  rating: number
+  created: string
+  updated: string
+  meta: TYPE_VENUE_META
+  location: TYPE_VENUE_LOC
+  owner: TYPE_USER
+  bookings: TYPE_BOOKING[]
 }
 
 export type TYPE_USER_LOGIN = {
@@ -87,9 +131,11 @@ export type TYPE_RESPONSE<T> = {
     status: string
     statusCode: number
     data: T
-    meta: TYPE_META
+    meta: TYPE_PAGINATION
   }
   error: string | TYPE_API_ERROR[]
 }
 
 export type TYPE_GET_USER = TYPE_RESPONSE<TYPE_USER>
+
+export type TYPE_GET_VENUE = TYPE_RESPONSE<TYPE_VENUE>

@@ -10,8 +10,8 @@ export const API_AUTH_REGISTER = `${API_AUTH}/register`
 
 export const API_HOLIDAZE = `${API_BASE}/holidaze`
 
-export const API_AH_VENUES = `${API_HOLIDAZE}/venues`
+export const API_VENUES = `${API_HOLIDAZE}/venues`
 
-export const API_AH_BOOKINGS = `${API_HOLIDAZE}/bookings`
+export const API_BOOKINGS = `${API_HOLIDAZE}/bookings`
 
-export const API_AH_USERS = `${API_HOLIDAZE}/profiles`
+export const API_USERS = `${API_HOLIDAZE}/profiles`

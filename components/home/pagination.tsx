@@ -11,13 +11,13 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination"
 import { useMediaQuery } from "@/hooks/use-media-query"
-import { TYPE_META } from "@/lib/definitions"
+import { TYPE_PAGINATION } from "@/lib/definitions"
 import { cn } from "@/lib/utils"
 import { useSearchParams } from "next/navigation"
 import { useMemo } from "react"
 
 type Props = {
-  meta: TYPE_META
+  meta: TYPE_PAGINATION
 }
 
 export default function MetaPagination({ meta }: Props) {

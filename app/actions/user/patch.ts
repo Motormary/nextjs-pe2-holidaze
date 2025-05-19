@@ -1,6 +1,6 @@
 "use server"
 
-import { API_AH_USERS } from "@/lib/constants"
+import { API_USERS } from "@/lib/constants"
 import {
   TYPE_GET_USER,
   Method,
@@ -19,7 +19,7 @@ export default async function updateUser(
   if (!session.accessToken) return failedToVerify()
   const res = await superFetch<TYPE_GET_USER>({
     method: Method.PUT,
-    url: API_AH_USERS + `/${session.user}`,
+    url: API_USERS + `/${session.user}`,
     body: data,
     token: session.accessToken,
   })

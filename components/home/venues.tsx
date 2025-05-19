@@ -12,12 +12,15 @@ export default async function Venues({
   searchParams: { q, page = "1" },
 }: props) {
   const query = q ? `/search?q=${q}&page=${page}` : `?page=${page}`
-  const res = await fetch(`https://v2.api.noroff.dev/holidaze/venues${query}`, {
-    method: "GET",
-    next: {
-      revalidate: 10,
+  const res = await fetch(
+    `https://v2.api.noroff.dev/holidaze/venues${query}&sort=created`,
+    {
+      method: "GET",
+      next: {
+        revalidate: 10,
+      },
     },
-  })
+  )
 
   const venues = await res.json()
 
