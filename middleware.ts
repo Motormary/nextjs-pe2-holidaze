@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { cookies } from "next/headers"
-import { decrypt, updateSession } from "./lib/session"
+import { decrypt, holiCookie, updateSession } from "./lib/session"
 
 // Nextjs docs
 
@@ -20,7 +20,7 @@ export default async function middleware(req: NextRequest) {
     if (!hasSession) {
       return NextResponse.redirect(new URL("/login", req.nextUrl))
     }
-    const cookie = (await cookies()).get("_ebox_session")?.value
+    const cookie = (await cookies()).get(holiCookie.name)?.value
     const session = await decrypt(cookie)
     if (!session?.accessToken)
       return NextResponse.redirect(new URL("/login", req.nextUrl))

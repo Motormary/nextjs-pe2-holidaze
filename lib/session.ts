@@ -4,14 +4,13 @@ import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { cache } from "react"
 
-// Nextjs docs
+export const holiCookie = {
+  name: "_holidaze_session",
+  duration: 24 * 60 * 60 * 1000,
+}
 
 const secretKey = process.env.API_KEY
 const encodedKey = new TextEncoder().encode(secretKey)
-const cookie = {
-  name: "_ebox_session", // This cookie is used in middleware btw
-  duration: 24 * 60 * 60 * 1000,
-}
 const noSession = {
   isAuth: false,
   accessToken: null,
@@ -47,7 +46,7 @@ export async function createSession(data: {
 }) {
   if (!data.accessToken || !data.username)
     throw new Error("⚡ createSession ~ data missing or incomplete")
-  const expires = new Date(Date.now() + cookie.duration)
+  const expires = new Date(Date.now() + holiCookie.duration)
   const session = await encrypt({
     accessToken: data.accessToken,
     username: data.username,
@@ -55,8 +54,8 @@ export async function createSession(data: {
   })
   const cookieStore = await cookies()
 
-  cookieStore.set(cookie.name, session, {
-    httpOnly: false,
+  cookieStore.set(holiCookie.name, session, {
+    httpOnly: true,
     secure: true,
     sameSite: "lax",
     path: "/",
@@ -65,10 +64,10 @@ export async function createSession(data: {
 }
 
 export const verifySession = cache(async () => {
-  const hasSessionCookie = (await cookies()).has(cookie.name)
+  const hasSessionCookie = (await cookies()).has(holiCookie.name)
   if (!hasSessionCookie) return noSession
 
-  const encryptedSession = (await cookies()).get(cookie.name)?.value
+  const encryptedSession = (await cookies()).get(holiCookie.name)?.value
   const session = await decrypt(encryptedSession)
 
   if (!session?.accessToken) {
@@ -83,7 +82,7 @@ export const verifySession = cache(async () => {
 })
 
 export async function updateSession() {
-  const session = (await cookies()).get(cookie.name)?.value
+  const session = (await cookies()).get(holiCookie.name)?.value
   const payload = await decrypt(session)
   const cookieStore = await cookies()
 
@@ -91,9 +90,9 @@ export async function updateSession() {
     return null
   }
 
-  const expires = new Date(Date.now() + cookie.duration)
-  cookieStore.set(cookie.name, session, {
-    httpOnly: false,
+  const expires = new Date(Date.now() + holiCookie.duration)
+  cookieStore.set(holiCookie.name, session, {
+    httpOnly: true,
     secure: true,
     expires: expires,
     sameSite: "lax",
@@ -102,6 +101,6 @@ export async function updateSession() {
 }
 
 export async function deleteSession() {
-  ;(await cookies()).delete(cookie.name)
+  ;(await cookies()).delete(holiCookie.name)
   redirect("/")
 }
