@@ -19,18 +19,17 @@ import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
 import { ChangeEvent, memo, useRef, useState, useTransition } from "react"
 import { DateRange } from "react-day-picker"
-import { Calendar } from "./ui/calendar"
-import { useUser } from "./user-provider"
 import NavMenu from "./nav-menu"
+import { Calendar } from "./ui/calendar"
 
 /* Backend does not support guests and check in filtering, so they are merely placeholders */
 
 function TopNav() {
   const router = useRouter()
-  const { user } = useUser()
   const inputRef = useRef<null | HTMLInputElement>(null)
-  const userLink = user ? `/user/${user.name}` : "/login"
+
   const scrolled = useScrolledFromTop(61)
+
   const searchParams = useSearchParams()
   const defaultQueryValue = searchParams.get("q")
 
@@ -91,7 +90,8 @@ function TopNav() {
       className={"peer bg-background h-[142px] w-full py-1.5 max-md:hidden"}
     >
       <motion.div
-        animate={scrolled ? { height: "60px" } : { height: "142px" }}
+        initial={scrolled ? { height: "70px" } : { height: "142px" }}
+        animate={scrolled ? { height: "70px" } : { height: "142px" }}
         transition={{ bounceDamping: 8, duration: 0.5 }}
         className={cn(
           scrolled && "shadow-md",
@@ -100,7 +100,7 @@ function TopNav() {
       >
         <div
           className={cn(
-            "bg-background container mx-auto flex min-h-[60px] justify-between px-4 py-2",
+            "bg-background container mx-auto flex min-h-[70px] justify-between px-4 py-2",
           )}
         >
           <Link href="/" className="content-center">
@@ -121,16 +121,27 @@ function TopNav() {
         <motion.div
           style={{
             zIndex: 50,
+            margin: "0 auto",
+            minHeight: "54px",
           }}
-          animate={scrolled ? { translateY: "-76px" } : { translateY: "0px" }}
+          initial={
+            scrolled
+              ? { translateY: "-82px", width: "380px" }
+              : { translateY: "0px", width: "520px" }
+          }
+          animate={
+            scrolled
+              ? { translateY: "-82px", width: "380px" }
+              : { translateY: "0px", width: "520px" }
+          }
           transition={{ bounceDamping: 8, duration: 0.5 }}
-          className="mx-auto"
+          className="mx-auto flex justify-center overflow-hidden rounded-full border shadow-sm"
         >
           <NavigationMenu>
             <NavigationMenuList>
               <NavigationMenuItem>
                 <NavigationMenuTrigger className="h-11">
-                  <div className={cn("flex flex-col lg:min-w-[130px]")}>
+                  <motion.div className={cn("flex flex-col lg:min-w-[130px]")}>
                     Fellowship
                     <span
                       className={cn(
@@ -144,7 +155,7 @@ function TopNav() {
                           : `Adults: ${adults}`
                         : "Add guests"}
                     </span>
-                  </div>
+                  </motion.div>
                 </NavigationMenuTrigger>
                 <NavigationMenuContent className="bg-transparent">
                   <div className="w-[300px] space-y-2 p-2">

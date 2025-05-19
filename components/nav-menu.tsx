@@ -36,73 +36,79 @@ export default function NavMenu() {
         Login
       </Link>
     )
-
-  return (
-    <DropdownMenu modal={false}>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          className="group hidden px-0 hover:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:flex"
+  else
+    return (
+      <DropdownMenu modal={false}>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="ghost"
+            className="group hidden px-0 hover:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:flex"
+          >
+            <span className="mb-[2px] max-w-36 truncate">{user.name}</span>
+            <Avatar
+              src={user.avatar.url}
+              alt="avatar"
+              size={32}
+              className="max-w-8"
+            />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent
+          align="end"
+          sideOffset={12}
+          className="w-56 max-md:hidden"
         >
-          <span className="mb-[2px] max-w-36 truncate">{user.name}</span>
-          <Avatar
-            src={user.avatar.url}
-            alt="avatar"
-            size={32}
-            className="max-w-8"
-          />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent
-        align="end"
-        sideOffset={12}
-        className="w-56 max-md:hidden"
-      >
-        <DropdownMenuGroup>
-          <DropdownMenuLabel className="truncate overflow-hidden">
-            {user.email}
-          </DropdownMenuLabel>
-          <DropdownMenuItem asChild>
-            <Link className="flex justify-between" href={`/user/${user.name}`}>
-              Profile <User />
-            </Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <Link className="flex justify-between" href={`/user/${user.name}`}>
-              Bookings <List />
-            </Link>
-          </DropdownMenuItem>
-          {user.venueManager ? (
+          <DropdownMenuGroup>
+            <DropdownMenuLabel className="truncate overflow-hidden">
+              {user.email}
+            </DropdownMenuLabel>
             <DropdownMenuItem asChild>
               <Link
                 className="flex justify-between"
-                href={`/user/${user.name}/venues`}
+                href={`/user/${user.name}`}
               >
-                My venues{" "}
-                <span className="p-0.5 text-xs">{user._count.venues}</span>
+                Profile <User />
               </Link>
             </DropdownMenuItem>
-          ) : null}
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <form action={handleLogout}>
-          <DropdownMenuItem className="group" asChild>
-            <div>
-              <button
-                className="group-active:text-muted-foreground w-full text-left hover:cursor-default"
-                type="submit"
+            <DropdownMenuItem asChild>
+              <Link
+                className="flex justify-between"
+                href={`/user/${user.name}`}
               >
-                Log out
-              </button>
-              <DropdownMenuShortcut>
-                {isPending ? (
-                  <RefreshCw className="ml-auto inline size-5 animate-spin" />
-                ) : null}
-              </DropdownMenuShortcut>
-            </div>
-          </DropdownMenuItem>
-        </form>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  )
+                Bookings <List />
+              </Link>
+            </DropdownMenuItem>
+            {user.venueManager ? (
+              <DropdownMenuItem asChild>
+                <Link
+                  className="flex justify-between"
+                  href={`/user/${user.name}/venues`}
+                >
+                  My venues{" "}
+                  <span className="p-0.5 text-xs">{user._count.venues}</span>
+                </Link>
+              </DropdownMenuItem>
+            ) : null}
+          </DropdownMenuGroup>
+          <DropdownMenuSeparator />
+          <form action={handleLogout}>
+            <DropdownMenuItem className="group" asChild>
+              <div>
+                <button
+                  className="group-active:text-muted-foreground w-full text-left hover:cursor-default"
+                  type="submit"
+                >
+                  Log out
+                </button>
+                <DropdownMenuShortcut>
+                  {isPending ? (
+                    <RefreshCw className="ml-auto inline size-5 animate-spin" />
+                  ) : null}
+                </DropdownMenuShortcut>
+              </div>
+            </DropdownMenuItem>
+          </form>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    )
 }

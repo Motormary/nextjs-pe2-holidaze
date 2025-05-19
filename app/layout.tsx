@@ -5,6 +5,7 @@ import { UserProvider } from "@/components/user-provider"
 import MobileNav from "@/components/mobile-nav"
 import TopNav from "@/components/top-nav"
 import { Toaster } from "sonner"
+import { Suspense } from "react"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,9 +33,13 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} [&_*]: relative flex min-h-svh flex-col items-center antialiased outline`}
       >
         <UserProvider>
-          <TopNav />
+          <Suspense fallback={null}>
+            <TopNav />
+          </Suspense>
           {children}
-          <MobileNav />
+          <Suspense fallback={null}>
+            <MobileNav />
+          </Suspense>
           <Toaster richColors />
         </UserProvider>
       </body>
