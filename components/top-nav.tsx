@@ -13,15 +13,15 @@ import {
 import { useScrolledFromTop } from "@/hooks/use-scroll"
 import { cn } from "@/lib/utils"
 import { format } from "date-fns"
-import { Loader2, Search, UserCircle, X } from "lucide-react"
+import { Loader2, Search, X } from "lucide-react"
 import { AnimatePresence, motion } from "motion/react"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
 import { ChangeEvent, memo, useRef, useState, useTransition } from "react"
 import { DateRange } from "react-day-picker"
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 import { Calendar } from "./ui/calendar"
 import { useUser } from "./user-provider"
+import NavMenu from "./nav-menu"
 
 /* Backend does not support guests and check in filtering, so they are merely placeholders */
 
@@ -105,40 +105,12 @@ function TopNav() {
         >
           <Link href="/" className="content-center">
             <picture className="size-8">
-              <img className="h-6" src="holi-logo.png" alt="logo" />
+              <img className="h-6" src="/holi-logo.png" alt="logo" />
             </picture>
           </Link>
-          <ul className="flex items-center gap-4">
-            {user ? (
-              <li className="flex gap-4">
-                <Button className="text-sm" variant="ghost">
-                  Add Venue
-                </Button>
-                <Link href={userLink} className="content-center">
-                  {user ? (
-                    <Avatar className="h-[32px] w-[32px]">
-                      <AvatarImage
-                        src={user?.avatar?.url}
-                        alt={user?.avatar?.alt}
-                      />
-                      <AvatarFallback>
-                        <UserCircle className="stroke-primary size-8" />
-                      </AvatarFallback>
-                    </Avatar>
-                  ) : (
-                    <UserCircle className="stroke-primary size-8" />
-                  )}
-                </Link>
-              </li>
-            ) : (
-              <Link
-                className={cn(buttonVariants({ variant: "ghost" }))}
-                href="/login"
-              >
-                Login
-              </Link>
-            )}
-          </ul>
+          <div className="flex items-center gap-4">
+            <NavMenu />
+          </div>
         </div>
         <div
           className={cn(

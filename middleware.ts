@@ -11,7 +11,7 @@ export default async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname
   const isPublicRoute = publicRoutes.includes(path)
   const isRedirectRoute = redirectWhenAuth.includes(path)
-  const hasSession = (await cookies()).has("_ebox_session")
+  const hasSession = (await cookies()).has(holiCookie.name)
 
   if (hasSession && isRedirectRoute)
     return NextResponse.redirect(new URL("/", req.nextUrl))
