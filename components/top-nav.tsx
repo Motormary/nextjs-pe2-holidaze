@@ -21,6 +21,7 @@ import { ChangeEvent, memo, useRef, useState, useTransition } from "react"
 import { DateRange } from "react-day-picker"
 import NavMenu from "./nav-menu"
 import { Calendar } from "./ui/calendar"
+import { useMediaQuery } from "@/hooks/use-media-query"
 
 /* Backend does not support guests and check in filtering, so they are merely placeholders */
 
@@ -29,6 +30,8 @@ function TopNav() {
   const inputRef = useRef<null | HTMLInputElement>(null)
 
   const scrolled = useScrolledFromTop(61)
+  const isDesktop = useMediaQuery("(min-width:1024px)")
+  const animateWidth = scrolled && !isDesktop
 
   const searchParams = useSearchParams()
   const defaultQueryValue = searchParams.get("q")
@@ -124,23 +127,21 @@ function TopNav() {
             margin: "0 auto",
             minHeight: "54px",
           }}
-          initial={
-            scrolled
-              ? { translateY: "-82px", width: "380px" }
-              : { translateY: "0px", width: "520px" }
-          }
-          animate={
-            scrolled
-              ? { translateY: "-82px", width: "380px" }
-              : { translateY: "0px", width: "520px" }
-          }
+          initial={{
+            translateY: scrolled ? "-82px" : "0px",
+            width: animateWidth ? "380px" : "668px",
+          }}
+          animate={{
+            translateY: scrolled ? "-82px" : "0px",
+            width: animateWidth ? "380px" : "668px",
+          }}
           transition={{ bounceDamping: 8, duration: 0.5 }}
-          className="mx-auto flex justify-center overflow-hidden rounded-full border shadow-sm"
+          className="mx-auto flex justify-center rounded-full border shadow-sm"
         >
           <NavigationMenu>
             <NavigationMenuList>
               <NavigationMenuItem>
-                <NavigationMenuTrigger className="h-11">
+                <NavigationMenuTrigger className="h-11 rounded-full">
                   <motion.div className={cn("flex flex-col lg:min-w-[130px]")}>
                     Fellowship
                     <span
@@ -229,7 +230,7 @@ function TopNav() {
                 </NavigationMenuContent>
               </NavigationMenuItem>
               <NavigationMenuItem className="pl-1">
-                <NavigationMenuTrigger className="h-11">
+                <NavigationMenuTrigger className="h-11 rounded-full">
                   <div className="flex flex-col">
                     Date
                     <span
@@ -279,7 +280,7 @@ function TopNav() {
                       onClick={() => setOpen(true)}
                       className={cn(
                         buttonVariants({ variant: "ghost" }),
-                        "focus-visible:bg-muted bg-background flex h-11 w-full flex-col gap-0 transition-[color,box-shadow]",
+                        "focus-visible:bg-muted bg-background flex h-11 w-full flex-col gap-0 rounded-full transition-[color,box-shadow]",
                       )}
                       exit={{ translateY: "-120%" }}
                       animate={{ translateY: "0%" }}
