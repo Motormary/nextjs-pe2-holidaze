@@ -37,7 +37,6 @@ function MobileNav() {
   )
   const router = useRouter()
   const { user } = useUser()
-  const userLink = user ? `/user/${user.name}` : "/login"
 
   function toggleDrawer() {
     setOpen(!open)
@@ -99,21 +98,25 @@ function MobileNav() {
             <SearchIcon />
             <p className="text-muted-foreground">Search</p>
           </button>
-          <Link href={userLink} className="flex flex-col items-center text-xs">
-            {user ? (
+          {user ? (
+            <Link
+              href={`/user/${user.name}`}
+              className="flex flex-col items-center text-xs"
+            >
               <Avatar className="h-[32px] w-[32px]">
                 <AvatarImage src={user.avatar.url} alt={user.avatar.alt} />
                 <AvatarFallback>
                   <UserCircle className="stroke-primary size-8" />
                 </AvatarFallback>
               </Avatar>
-            ) : (
+              <p className="text-muted-foreground">My Page</p>
+            </Link>
+          ) : (
+            <Link href="/login" className="flex flex-col items-center text-xs">
               <UserCircle className="stroke-primary size-8" />
-            )}
-            <p className="text-muted-foreground">
-              {user ? "My Page" : "Login"}
-            </p>
-          </Link>
+              <p className="text-muted-foreground">Login</p>
+            </Link>
+          )}
         </div>
       </nav>
       <Drawer open={open} onOpenChange={setOpen}>
