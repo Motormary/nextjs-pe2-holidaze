@@ -22,12 +22,12 @@ export default async function VenuePage({ params }: props) {
 
 function Loading() {
   return (
-    <div className="mx-auto grid max-h-[584px] min-h-[433px] grid-cols-4 grid-rows-2 justify-center gap-2 md:container md:min-h-[584px] [&>*]:rounded-lg [&>*]:nth-1:col-span-2 [&>*]:nth-1:row-span-2">
+    <div className="mx-auto max-h-[584px] min-h-[433px] grid-cols-4 grid-rows-2 justify-center gap-2 max-md:max-h-[375px] sm:grid md:container md:min-h-[584px] [&>*]:rounded-lg [&>*]:nth-1:col-span-2 [&>*]:nth-1:row-span-2">
       <Skeleton />
-      <Skeleton />
-      <Skeleton />
-      <Skeleton />
-      <Skeleton />
+      <Skeleton className="max-md:hidden" />
+      <Skeleton className="max-md:hidden" />
+      <Skeleton className="max-md:hidden" />
+      <Skeleton className="max-md:hidden" />
     </div>
   )
 }
