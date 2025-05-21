@@ -114,10 +114,10 @@
 }
 
 h1 {
-  @apply text-3xl font-bold;
+  @apply text-[clamp(1.5rem,2.5vw,1.875rem)] font-bold;
 }
 h2 {
-  @apply text-2xl font-bold;
+  @apply text-[clamp(1.175rem,2.5vw,1.35rem)] font-bold;
 }
 
 @layer base {

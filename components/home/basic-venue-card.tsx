@@ -1,7 +1,7 @@
 import { cn, numToDollarString } from "@/lib/utils"
-import { Star } from "lucide-react"
 import Link from "next/link"
 import altImg from "public/alt.svg"
+import Rating from "../venue/rating"
 
 type props = {
   id: string
@@ -50,15 +50,7 @@ export default async function BasicVenueCard({ data }: { data?: props }) {
         >
           {data?.location.address}, {data?.location.city}
         </p>
-        <span
-          className={cn(
-            data?.rating === 0 ? "hidden" : "flex",
-            "items-center gap-0.5 text-sm select-none",
-          )}
-        >
-          <Star className="size-4 fill-amber-300 stroke-amber-500" />
-          {data?.rating.toFixed(1)}
-        </span>
+        <Rating rating={data?.rating} />
       </div>
       <p title={data?.name}>{data?.name}</p>
       <p className="text-muted-foreground text-sm">

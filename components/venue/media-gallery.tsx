@@ -1,14 +1,14 @@
 "use client"
 
 import { useMediaQuery } from "@/hooks/use-media-query"
-import { TYPE_GET_VENUE } from "@/lib/definitions"
+import { TYPE_MEDIA } from "@/lib/definitions"
 import { cn } from "@/lib/utils"
 import Image from "next/image"
-import { memo, use, useState } from "react"
+import { memo, useState } from "react"
 import altImage from "public/alt.svg"
 
 type props = {
-  gallery: Promise<TYPE_GET_VENUE>
+  media: TYPE_MEDIA[]
 }
 
 function getGridRows(mediaLength: number): string {
@@ -26,7 +26,7 @@ function getGridRows(mediaLength: number): string {
   }
 }
 
-function MediaGallery({ gallery }: props) {
+function MediaGallery({ media }: props) {
   const [index, setIndex] = useState(0)
   const [swipeStartX, setSwipeStartX] = useState<number | null>(null)
   const [currentSwipeX, setCurrentSwipeX] = useState<number | null>(null)
@@ -56,11 +56,6 @@ function MediaGallery({ gallery }: props) {
     setCurrentSwipeX(null)
   }
 
-  const {
-    data: {
-      data: { media },
-    },
-  } = use(gallery)
   const isDesktop = useMediaQuery("(min-width:768px)")
 
   if (isDesktop)

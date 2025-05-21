@@ -54,7 +54,6 @@ export async function createSession(data: {
     username: data.username,
     expires,
   })
-  console.log("🚀 ~ session:", session)
   const cookieStore = await cookies()
 
   cookieStore.set(holiCookie.name, session, {
@@ -68,7 +67,6 @@ export async function createSession(data: {
 
 export const verifySession = cache(async () => {
   const hasSessionCookie = (await cookies()).has(holiCookie.name)
-  console.log("🚀 ~ verifySession ~ hasSessionCookie:", hasSessionCookie)
   if (!hasSessionCookie) return noSession
 
   const encryptedSession = (await cookies()).get(holiCookie.name)?.value
