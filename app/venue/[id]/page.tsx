@@ -2,6 +2,7 @@ import getVenue from "@/app/actions/venue/get"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"
 import { Skeleton } from "@/components/ui/skeleton"
+import Map from "@/components/venue/dynamic-map"
 import MediaGallery from "@/components/venue/media-gallery"
 import Rating from "@/components/venue/rating"
 import { checkAndThrowError } from "@/lib/handle-errors"
@@ -16,6 +17,7 @@ type props = {
 
 export default async function VenuePage({ params }: props) {
   const { id } = await params
+  if (id.endsWith(".png")) return
   const { data, success, error, source } = await getVenue(id)
 
   if (!success) checkAndThrowError(error, source)
@@ -100,9 +102,32 @@ export default async function VenuePage({ params }: props) {
             </span>
           </div>
         </div>
-        <div className="mt-6">
-          <h2 className="text-3xl">Location</h2>
-        </div>
+        {!data.data.location?.lat || !data.data.location?.lng ? (
+          <div className="mt-6">
+            <h2 className="text-3xl">Location</h2>
+            <div className="overflow-hidden rounded-lg">
+              <Suspense
+                fallback={
+                  <div className="flex h-[300px] w-full items-center justify-center bg-gray-100">
+                    Loading map...
+                  </div>
+                }
+              >
+                <Map
+                  location={[
+                    data.data.location?.lat && data.data.location?.lat > 0
+                      ? data.data.location?.lat
+                      : 52.47933,
+                    data.data.location?.lng && data.data.location?.lng > 0
+                      ? data.data.location?.lng
+                      : 62.18566,
+                  ]}
+                  address={`${data.data.location.address}${data.data.location.city ? `, ${data.data.location.city}` : ""}`}
+                />
+              </Suspense>
+            </div>
+          </div>
+        ) : null}
       </div>
     </main>
   )
