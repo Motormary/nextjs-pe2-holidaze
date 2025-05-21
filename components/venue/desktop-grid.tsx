@@ -79,8 +79,8 @@ function MediaGallery({ gallery }: props) {
                 className="h-full w-full rounded-lg object-cover"
                 height={600}
                 width={600}
-                src={media?.url}
-                alt={media?.alt}
+                src={media?.url ?? "/placeholder.svg"}
+                alt={media?.alt ?? "Alt image"}
               />
             )
           })
@@ -104,8 +104,8 @@ function MediaGallery({ gallery }: props) {
       onTouchEnd={handleTouchEnd}
     >
       <Image
-        src={media[index].url || "/placeholder.svg"}
-        alt={media[index].alt}
+        src={media[index]?.url ?? "/placeholder.svg"}
+        alt={media[index]?.alt ?? "Alt image"}
         width={400}
         height={400}
         draggable={false}

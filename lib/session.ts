@@ -4,6 +4,8 @@ import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { cache } from "react"
 
+//todo: set secure cookie
+
 export const holiCookie = {
   name: "_holidaze_session",
   duration: 24 * 60 * 60 * 1000,
@@ -52,11 +54,12 @@ export async function createSession(data: {
     username: data.username,
     expires,
   })
+  console.log("🚀 ~ session:", session)
   const cookieStore = await cookies()
 
   cookieStore.set(holiCookie.name, session, {
-    httpOnly: true,
-    secure: true,
+    httpOnly: false,
+    secure: false,
     sameSite: "lax",
     path: "/",
     expires,
@@ -65,6 +68,7 @@ export async function createSession(data: {
 
 export const verifySession = cache(async () => {
   const hasSessionCookie = (await cookies()).has(holiCookie.name)
+  console.log("🚀 ~ verifySession ~ hasSessionCookie:", hasSessionCookie)
   if (!hasSessionCookie) return noSession
 
   const encryptedSession = (await cookies()).get(holiCookie.name)?.value
@@ -92,8 +96,8 @@ export async function updateSession() {
 
   const expires = new Date(Date.now() + holiCookie.duration)
   cookieStore.set(holiCookie.name, session, {
-    httpOnly: true,
-    secure: true,
+    httpOnly: false,
+    secure: false,
     expires: expires,
     sameSite: "lax",
     path: "/",

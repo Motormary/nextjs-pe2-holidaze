@@ -30,7 +30,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} [&_*]: relative flex min-h-svh flex-col items-center antialiased outline`}
+        className={`${geistSans.variable} ${geistMono.variable} [&_*]: relative flex min-h-screen flex-col items-center antialiased outline`}
       >
         <UserProvider>
           <Suspense fallback={null}>
