@@ -9,7 +9,6 @@ type props = {
 }
 
 function Description({ description }: props) {
-  console.log("🚀 ~ Description ~ description:", description)
   const [readMore, setReadMore] = useState(false)
   const [showButton, setShowButton] = useState(false)
   const paragraphRef = useRef<HTMLParagraphElement>(null)
