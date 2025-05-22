@@ -153,8 +153,8 @@ function BookingForm({ data }: props) {
                         date < new Date(new Date().setHours(0, 0, 0, 0)) ||
                         data.bookings.some(
                           (booking) =>
-                            booking.dateFrom === date.toISOString() ||
-                            booking.dateTo === date.toISOString(),
+                            date.toISOString() >= booking.dateFrom &&
+                            date.toISOString() <= booking.dateTo,
                         )
                       }
                     />

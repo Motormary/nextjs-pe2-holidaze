@@ -1,7 +1,7 @@
 "use client"
 
 import { cn } from "@/lib/utils"
-import { memo, useState } from "react"
+import { memo, useEffect, useRef, useState } from "react"
 import { Button } from "../ui/button"
 
 type props = {
@@ -11,6 +11,20 @@ type props = {
 function Description({ description }: props) {
   console.log("🚀 ~ Description ~ description:", description)
   const [readMore, setReadMore] = useState(false)
+  const [showButton, setShowButton] = useState(false)
+  const paragraphRef = useRef<HTMLParagraphElement>(null)
+
+  useEffect(() => {
+    const paragraph = paragraphRef.current
+    if (paragraph) {
+      const lineHeight = parseFloat(getComputedStyle(paragraph).lineHeight)
+      const maxHeight = lineHeight * 3
+
+      if (paragraph.scrollHeight > maxHeight) {
+        setShowButton(true)
+      }
+    }
+  }, [description])
 
   function handleChange() {
     setReadMore(!readMore)
@@ -19,6 +33,7 @@ function Description({ description }: props) {
   return (
     <>
       <p
+        ref={paragraphRef}
         className={cn(
           !readMore && "line-clamp-3",
           "text-secondary-foreground text-sm whitespace-pre-line",
@@ -26,9 +41,11 @@ function Description({ description }: props) {
       >
         {description}
       </p>
-      <Button onClick={handleChange} className="w-full" variant="ghost">
-        {readMore ? "View Less" : "View More"}
-      </Button>
+      {showButton ? (
+        <Button onClick={handleChange} className="w-full" variant="ghost">
+          {readMore ? "View Less" : "View More"}
+        </Button>
+      ) : null}
     </>
   )
 }
