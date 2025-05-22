@@ -9,7 +9,9 @@ const redirectWhenAuth = ["/login", "/register"]
 
 export default async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname
-  const isPublicRoute = publicRoutes.includes(path)
+  // Debug the exact path string
+
+  const isPublicRoute = publicRoutes.includes(path) || path.startsWith("/venue")
   const isRedirectRoute = redirectWhenAuth.includes(path)
   const hasSession = (await cookies()).has(holiCookie.name)
 

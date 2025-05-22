@@ -3,9 +3,8 @@
 import { TYPE_NEW_BOOKING, TYPE_VENUE } from "@/lib/definitions"
 import { Calendar } from "../ui/calendar"
 import { cn, numToDollarString } from "@/lib/utils"
-import { Button } from "../ui/button"
-import { ChangeEvent, memo, useEffect, useState } from "react"
-import { DateRange } from "react-day-picker"
+import { Button, buttonVariants } from "../ui/button"
+import { ChangeEvent, memo, useEffect } from "react"
 import { useMediaQuery } from "@/hooks/use-media-query"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 import { CalendarIcon } from "lucide-react"
@@ -18,6 +17,9 @@ import { Input } from "../ui/input"
 import BookVenue from "@/app/actions/venue/book"
 import { toast } from "sonner"
 import { handleErrors } from "@/lib/handle-errors"
+import { useRouter } from "next/navigation"
+import { useUser } from "../user-provider"
+import Link from "next/link"
 
 type props = {
   data: TYPE_VENUE
@@ -47,6 +49,9 @@ const apiSchema = BookingSchema.transform((data) => {
 })
 
 function BookingForm({ data }: props) {
+  const isMobile = useMediaQuery("(max-width:768px)")
+  const router = useRouter()
+  const { user } = useUser()
   const form = useForm<TYPE_NEW_BOOKING>({
     resolver: zodResolver(BookingSchema),
     defaultValues: {
@@ -54,9 +59,6 @@ function BookingForm({ data }: props) {
       guests: 0,
     },
   })
-
-  const isMobile = useMediaQuery("(max-width:768px)")
-  const [date, setDate] = useState<DateRange | undefined>(undefined)
 
   // Scrolls mobile users to form fields if there are any parsing errors
   useEffect(() => {
@@ -67,8 +69,6 @@ function BookingForm({ data }: props) {
   async function onSubmit(formData: z.infer<typeof BookingSchema>) {
     const formattedData = apiSchema.parse(formData)
     const { success, error, source } = await BookVenue(formattedData)
-    console.log("🚀 ~ onSubmit ~ success:", success)
-    console.log("🚀 ~ onSubmit ~ error:", error)
 
     if (success)
       toast.success("Happy Holidaze! 🎉", {
@@ -108,7 +108,8 @@ function BookingForm({ data }: props) {
         onSubmit={form.handleSubmit(onSubmit)}
         className="pb-24"
       >
-        <div className="flex flex-col gap-8 px-4">
+        <div className="container flex flex-col gap-5 px-4">
+          <h2>Reservation</h2>
           <FormField
             control={form.control}
             name="dateRange"
@@ -211,7 +212,16 @@ function BookingForm({ data }: props) {
             <p>Sep 23 - Dec 10</p>
           </div>
           <div className="flex w-full items-center justify-center">
-            <Button className="w-full">Book Now</Button>
+            {user ? (
+              <Button className="w-full">Book Now</Button>
+            ) : (
+              <Link
+                className={cn(buttonVariants({ variant: "default" }), "w-full")}
+                href="/login"
+              >
+                <Button className="w-full">Book Now</Button>
+              </Link>
+            )}
           </div>
         </div>
       </form>

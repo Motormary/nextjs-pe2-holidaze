@@ -38,10 +38,10 @@ export default async function BasicVenueCard({ data }: { data?: props }) {
             imageUrl && "object-cover object-center",
             `h-[236px] w-full font-light underline`,
           )}
-          src="/alt.svg"
+          src={altImg.src}
           alt={data?.media?.[0]?.alt}
         />
-        <source className="object-contain object-center" srcSet="/alt.svg" />
+        <source className="object-contain object-center" srcSet={altImg.src} />
       </picture>
       <div className="flex justify-between">
         <p

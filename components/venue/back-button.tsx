@@ -8,9 +8,12 @@ function BackButton() {
     window.history.back()
   }
   return (
-    <button onClick={handleReturn}>
-      <ArrowLeft className="text-muted-foreground" />
-    </button>
+    <div className="flex items-center p-2 sm:hidden">
+      <button onClick={handleReturn}>
+        <ArrowLeft className="text-muted-foreground" />
+        <p className="sr-only">Return</p>
+      </button>
+    </div>
   )
 }
 

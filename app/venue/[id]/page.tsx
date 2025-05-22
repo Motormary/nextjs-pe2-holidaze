@@ -24,9 +24,7 @@ export default async function VenuePage({ params }: props) {
 
   return (
     <main className="min-h-[calc(100vh-142px)] w-full grow overflow-hidden md:py-8">
-      <div className="px-2 py-2">
-        <BackButton />
-      </div>
+      <BackButton />
       <Suspense fallback={<Loading />}>
         <MediaGallery media={data.data.media} />
       </Suspense>
@@ -62,6 +60,7 @@ export default async function VenuePage({ params }: props) {
         </Link>
 
         <div className="space-y-5 [&_svg]:size-5 [&>div]:flex [&>div]:items-center [&>div]:gap-2 [&>div]:text-sm">
+          <h2>Resources</h2>
           <div>
             <Users className="stroke-blue-500" />
             {data.data.maxGuests} Guests
@@ -109,7 +108,7 @@ export default async function VenuePage({ params }: props) {
         </div>
         {!data.data.location?.lat || !data.data.location?.lng ? (
           <div className="mt-6 space-y-4">
-            <h2 className="text-3xl">Location</h2>
+            <h2>Location</h2>
             <div className="overflow-hidden rounded-lg">
               <Suspense
                 fallback={

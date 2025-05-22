@@ -75,14 +75,14 @@ function MediaGallery({ media }: props) {
                 height={600}
                 width={600}
                 src={media?.url ?? "/placeholder.svg"}
-                alt={media?.alt ?? "Alt image"}
+                alt={media?.alt ?? "Alternative image"}
               />
             )
           })
         ) : (
           <Image
             src={media[0]?.url ?? altImage.src}
-            alt={media[0]?.alt}
+            alt={media[0]?.alt ?? "Image missing"}
             width={1024}
             height={584}
             className="bg-muted mx-auto max-h-[584px] rounded-lg object-contain"
