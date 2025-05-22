@@ -3,6 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Skeleton } from "@/components/ui/skeleton"
 import BackButton from "@/components/venue/back-button"
 import BookingForm from "@/components/venue/booking-form"
+import Description from "@/components/venue/description"
 import Map from "@/components/venue/dynamic-map"
 import MediaGallery from "@/components/venue/media-gallery"
 import Rating from "@/components/venue/rating"
@@ -36,10 +37,7 @@ export default async function VenuePage({ params }: props) {
           </p>
         </div>
         <Rating rating={data.data.rating} />
-        <p className="text-secondary-foreground text-sm">
-          {data.data.description}
-        </p>
-
+        <Description description={data.data.description} />
         <Link
           href={`/user/${data.data.owner.name}`}
           className="flex items-center gap-4 border-y py-4"
