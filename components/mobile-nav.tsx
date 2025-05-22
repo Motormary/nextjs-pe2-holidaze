@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils"
 import { format } from "date-fns/format"
 import { CalendarIcon, Compass, Loader2, UserCircle } from "lucide-react"
 import Link from "next/link"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useParams, useRouter, useSearchParams } from "next/navigation"
 import { ChangeEvent, memo, useState, useTransition } from "react"
 import { DateRange } from "react-day-picker"
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
@@ -29,6 +29,7 @@ function MobileNav() {
   const [adults, setAdults] = useState(0)
   const [childrens, setChildren] = useState(0)
   const searchParams = useSearchParams()
+  const { id } = useParams()
   const defaultQueryValue = searchParams.get("q")
 
   const [isPending, startTransition] = useTransition()
@@ -79,6 +80,8 @@ function MobileNav() {
       })
     }
   }
+
+  if (id) return null
 
   return (
     <div

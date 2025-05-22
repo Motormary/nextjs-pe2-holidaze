@@ -48,7 +48,7 @@ type TYPE_VENUE_LOC = {
   lng: number
 }
 
-type TYPE_BOOKING = {
+export type TYPE_BOOKING = {
   id: string
   dateFrom: string
   dateTo: string
@@ -56,6 +56,15 @@ type TYPE_BOOKING = {
   created: string
   updated: string
   customer: TYPE_USER
+}
+
+export type TYPE_NEW_BOOKING = {
+  dateRange: {
+    from: Date
+    to: Date
+  }
+  guests: number
+  venueId: string
 }
 
 export type TYPE_PAGINATION = {
@@ -139,3 +148,5 @@ export type TYPE_RESPONSE<T> = {
 export type TYPE_GET_USER = TYPE_RESPONSE<TYPE_USER>
 
 export type TYPE_GET_VENUE = TYPE_RESPONSE<TYPE_VENUE>
+
+export type TYPE_GET_BOOKING = TYPE_RESPONSE<TYPE_BOOKING>

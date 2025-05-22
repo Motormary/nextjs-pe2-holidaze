@@ -1,13 +1,14 @@
 import getVenue from "@/app/actions/venue/get"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Separator } from "@/components/ui/separator"
 import { Skeleton } from "@/components/ui/skeleton"
+import BackButton from "@/components/venue/back-button"
+import BookingForm from "@/components/venue/booking-form"
 import Map from "@/components/venue/dynamic-map"
 import MediaGallery from "@/components/venue/media-gallery"
 import Rating from "@/components/venue/rating"
 import { checkAndThrowError } from "@/lib/handle-errors"
 import { cn } from "@/lib/utils"
-import { Car, Coffee, PawPrint, UserCircle, Users, Wifi } from "lucide-react"
+import { Car, Coffee, PawPrint, UserCircle, Users, Wifi, X } from "lucide-react"
 import Link from "next/link"
 import { Suspense } from "react"
 
@@ -17,29 +18,33 @@ type props = {
 
 export default async function VenuePage({ params }: props) {
   const { id } = await params
-  if (id.endsWith(".png")) return
   const { data, success, error, source } = await getVenue(id)
 
   if (!success) checkAndThrowError(error, source)
 
   return (
     <main className="min-h-[calc(100vh-142px)] w-full grow overflow-hidden md:py-8">
+      <div className="px-2 py-2">
+        <BackButton />
+      </div>
       <Suspense fallback={<Loading />}>
         <MediaGallery media={data.data.media} />
       </Suspense>
       <div className="container mx-auto space-y-4 px-4 py-4">
-        <h1>{data.data.name}</h1>
-        <p className="text-muted-foreground text-sm">
-          {data.data.location.address}, {data.data.location.city}
-        </p>
+        <div className="space-y-1">
+          <h1>{data.data.name}</h1>
+          <p className="text-muted-foreground text-sm">
+            {data.data.location.address}, {data.data.location.city}
+          </p>
+        </div>
         <Rating rating={data.data.rating} />
         <p className="text-secondary-foreground text-sm">
           {data.data.description}
         </p>
-        <Separator />
+
         <Link
           href={`/user/${data.data.owner.name}`}
-          className="flex items-center gap-4"
+          className="flex items-center gap-4 border-y py-4"
         >
           <Avatar className="h-[32px] w-[32px]">
             <AvatarImage
@@ -55,55 +60,55 @@ export default async function VenuePage({ params }: props) {
             <p className="text-sm">{data.data.owner.name}</p>
           </div>
         </Link>
-        <Separator />
+
         <div className="space-y-5 [&_svg]:size-5 [&>div]:flex [&>div]:items-center [&>div]:gap-2 [&>div]:text-sm">
           <div>
-            <Users />
+            <Users className="stroke-blue-500" />
             {data.data.maxGuests} Guests
           </div>
           <div>
-            <Wifi
-              className={cn(
-                data.data.meta.wifi ? "stroke-blue-500" : "stroke-red-500",
-              )}
-            />
+            {data.data.meta.wifi ? (
+              <Wifi className="stroke-blue-500" />
+            ) : (
+              <X className="stroke-red-500" />
+            )}
             <span className={cn(!data.data.meta.wifi && "line-through")}>
               Wifi
             </span>
           </div>
           <div>
-            <Car
-              className={cn(
-                data.data.meta.parking ? "stroke-blue-500" : "stroke-red-500",
-              )}
-            />
+            {data.data.meta.parking ? (
+              <Car className="stroke-blue-500" />
+            ) : (
+              <X className="stroke-red-500" />
+            )}
             <span className={cn(!data.data.meta.parking && "line-through")}>
               Parking
             </span>
           </div>
           <div>
-            <Coffee
-              className={cn(
-                data.data.meta.breakfast ? "stroke-blue-500" : "stroke-red-500",
-              )}
-            />
+            {data.data.meta.breakfast ? (
+              <Coffee className="stroke-blue-500" />
+            ) : (
+              <X className="stroke-red-500" />
+            )}
             <span className={cn(!data.data.meta.breakfast && "line-through")}>
               Breakfast
             </span>
           </div>
           <div>
-            <PawPrint
-              className={cn(
-                data.data.meta.pets ? "stroke-blue-500" : "stroke-red-500",
-              )}
-            />
+            {data.data.meta.pets ? (
+              <PawPrint className="stroke-blue-500" />
+            ) : (
+              <X className="stroke-red-500" />
+            )}
             <span className={cn(!data.data.meta.pets && "line-through")}>
               Pets
             </span>
           </div>
         </div>
         {!data.data.location?.lat || !data.data.location?.lng ? (
-          <div className="mt-6">
+          <div className="mt-6 space-y-4">
             <h2 className="text-3xl">Location</h2>
             <div className="overflow-hidden rounded-lg">
               <Suspense
@@ -129,6 +134,7 @@ export default async function VenuePage({ params }: props) {
           </div>
         ) : null}
       </div>
+      <BookingForm data={data.data} />
     </main>
   )
 }

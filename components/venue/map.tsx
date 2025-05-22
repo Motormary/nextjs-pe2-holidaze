@@ -29,7 +29,6 @@ type Props = {
 }
 
 export default function Map({ location, address }: Props) {
-  console.log("🚀 ~ Map ~ location:", location)
   return (
     <MapContainer
       className="h-[300px] w-full"
