@@ -83,7 +83,7 @@ function MobileNav() {
   return (
     <div
       data-search={isPending ? "" : undefined}
-      className="bg-background sticky bottom-0 z-50 w-full drop-shadow-[0px_5px_8px_gray] md:hidden"
+      className="bg-background sticky bottom-0 z-[9999] w-full drop-shadow-[0px_5px_8px_gray] md:hidden"
     >
       <nav className="h-[59px]">
         <div className="container mx-auto grid h-full grid-cols-3 items-center gap-6 px-4">
