@@ -1,10 +1,11 @@
 "use server"
 
 import { API_BOOKINGS } from "@/lib/constants"
-import { Method, TYPE_GET_BOOKING } from "@/lib/definitions"
+import { CacheTags, Method, TYPE_GET_BOOKING } from "@/lib/definitions"
 import { verifySession } from "@/lib/session"
 import { failedToVerify } from "@/lib/utils"
 import superFetch from "../fetch"
+import { revalidateTag } from "next/cache"
 
 type Booking = {
   dateFrom: Date
@@ -27,6 +28,8 @@ export default async function BookVenue(data: Booking) {
     console.error("⚡ getUser ~ Error fetching user:", res)
     return { ...res }
   }
+
+  revalidateTag(CacheTags.VENUE + data.venueId)
 
   return { ...res }
 }

@@ -98,7 +98,8 @@ function BookingForm({ data }: props) {
     const value = event.target.value
     const isNum = /^\d+$/.test(value)
     if (!value) form.resetField("guests")
-    if (isNum) form.setValue("guests", Number(value))
+    if (isNum && Number(value) <= data.maxGuests)
+      form.setValue("guests", Number(value))
   }
 
   return (
@@ -149,7 +150,12 @@ function BookingForm({ data }: props) {
                       selected={field.value}
                       onSelect={field.onChange}
                       disabled={(date) =>
-                        date < new Date(new Date().setHours(0, 0, 0, 0))
+                        date < new Date(new Date().setHours(0, 0, 0, 0)) ||
+                        data.bookings.some(
+                          (booking) =>
+                            booking.dateFrom === date.toISOString() ||
+                            booking.dateTo === date.toISOString(),
+                        )
                       }
                     />
                   </PopoverContent>
@@ -167,6 +173,7 @@ function BookingForm({ data }: props) {
                   <FormLabel>Guests</FormLabel>
                   <div className="flex gap-4">
                     <Button
+                      disabled={field.value === 0}
                       onClick={(e) => {
                         e.preventDefault()
                         form.setValue(
@@ -188,6 +195,7 @@ function BookingForm({ data }: props) {
                       className="w-10 overflow-clip border-transparent p-0 text-center outline-transparent"
                     />
                     <Button
+                      disabled={field.value >= data.maxGuests}
                       onClick={(e) => {
                         e.preventDefault()
                         form.setValue("guests", field.value + 1)

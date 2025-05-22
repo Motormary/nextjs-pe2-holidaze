@@ -11,7 +11,7 @@ export enum CacheOptions {
  */
 export enum CacheTags {
   ALL_VENUES = "venues",
-  VENUE = "venue-id-", //! + listing uuid
+  VENUE = "venue-id-", //! + venue uuid
   USER = "user-", //! + username
   USER_VENUES = "user-venues-", //! + username
   USER_BOOKINGS = "user-bookings-", //! + username
