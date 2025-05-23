@@ -3,7 +3,7 @@ import * as React from "react"
 export function useMediaQuery(query: string) {
   const [value, setValue] = React.useState(false)
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     function onChange(event: MediaQueryListEvent) {
       setValue(event.matches)
     }

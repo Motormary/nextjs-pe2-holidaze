@@ -27,7 +27,7 @@ export default async function VenuePage({ params }: props) {
     <main className="mx-auto min-h-[calc(100vh-142px)] w-full grow overflow-hidden md:container md:py-8">
       <BackButton />
       <Suspense fallback={<Loading />}>
-        <MediaGallery media={data.data.media} />
+        <MediaGallery media={data.data.media} id={id} />
       </Suspense>
       <div className="md:grid md:grid-cols-2 lg:grid-cols-3">
         <div className="lg:col-span-2">
