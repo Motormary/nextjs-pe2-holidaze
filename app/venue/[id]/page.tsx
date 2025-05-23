@@ -31,7 +31,7 @@ export default async function VenuePage({ params }: props) {
       </Suspense>
       <div className="md:grid md:grid-cols-2 lg:grid-cols-3">
         <div className="lg:col-span-2">
-          <div className="container mx-auto space-y-4 p-4">
+          <div className="mx-auto space-y-4 p-4">
             <div className="space-y-1">
               <h1>{data.data.name}</h1>
               <p className="text-muted-foreground text-sm">
