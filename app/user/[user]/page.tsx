@@ -9,7 +9,8 @@ type props = {
 
 export default async function UserPage({ params }: props) {
   const { user } = await params
-  const { data, success, error, source } = await getUser(user)
+  const { data, success, error, source } = await getUser(user, true)
+  console.log("🚀 ~ UserPage ~ data:", data.data.bookings)
 
   if (!success) checkAndThrowError(error, source)
 
@@ -24,7 +25,19 @@ export default async function UserPage({ params }: props) {
       </div>
       <h1 className="text-center">{user}</h1>
       <EditProfileDialog data={data.data} />
-      <div></div>
+      <div className="space-y-4">
+        <h2>
+          Bookings{" "}
+          <span className="text-sm font-normal">
+            {data.data._count.bookings}
+          </span>
+        </h2>
+        <div>
+          {data.data.bookings.map((booking) => {
+            return <div key={booking.id}>{booking.venue.name}</div>
+          })}
+        </div>
+      </div>
     </main>
   )
 }

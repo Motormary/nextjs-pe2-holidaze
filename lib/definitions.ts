@@ -56,6 +56,7 @@ export type TYPE_BOOKING = {
   created: string
   updated: string
   customer: TYPE_USER
+  venue: TYPE_VENUE
 }
 
 export type TYPE_NEW_BOOKING = {
