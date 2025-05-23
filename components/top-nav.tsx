@@ -29,7 +29,7 @@ function TopNav() {
   const router = useRouter()
   const inputRef = useRef<null | HTMLInputElement>(null)
 
-  const scrolled = useScrolledFromTop(61)
+  const scrolled = useScrolledFromTop(0)
   const isDesktop = useMediaQuery("(min-width:1024px)")
   const animateWidth = scrolled && !isDesktop
 

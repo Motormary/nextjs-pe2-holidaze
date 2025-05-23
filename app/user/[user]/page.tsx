@@ -1,8 +1,9 @@
 type props = {
-  params: Promise<{ id: string }>
+  params: Promise<{ user: string }>
 }
 
 export default async function UserPage({ params }: props) {
-  console.log("🚀 ~ UserPage ~ params:", (await params).id)
+  const { user } = await params
+  console.log("🚀 ~ UserPage ~ user:", user)
   return <main className="grow">UserPage</main>
 }

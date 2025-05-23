@@ -8,12 +8,11 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
 import { DropdownMenuGroup } from "@radix-ui/react-dropdown-menu"
-import { List, RefreshCw, User } from "lucide-react"
+import { List, User } from "lucide-react"
 import Link from "next/link"
 import { useTransition } from "react"
 import Avatar from "./next-avatar"
@@ -91,23 +90,7 @@ export default function NavMenu() {
             ) : null}
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <form action={handleLogout}>
-            <DropdownMenuItem className="group" asChild>
-              <div>
-                <button
-                  className="group-active:text-muted-foreground w-full text-left hover:cursor-default"
-                  type="submit"
-                >
-                  Log out
-                </button>
-                <DropdownMenuShortcut>
-                  {isPending ? (
-                    <RefreshCw className="ml-auto inline size-5 animate-spin" />
-                  ) : null}
-                </DropdownMenuShortcut>
-              </div>
-            </DropdownMenuItem>
-          </form>
+          <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     )

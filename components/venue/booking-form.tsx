@@ -1,25 +1,26 @@
 "use client"
 
-import { TYPE_NEW_BOOKING, TYPE_VENUE } from "@/lib/definitions"
-import { Calendar } from "../ui/calendar"
-import { cn, numToDollarString } from "@/lib/utils"
-import { Button, buttonVariants } from "../ui/button"
-import { ChangeEvent, memo, useEffect } from "react"
+import BookVenue from "@/app/actions/venue/book"
 import { useMediaQuery } from "@/hooks/use-media-query"
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
-import { CalendarIcon } from "lucide-react"
-import { format } from "date-fns"
-import { z } from "zod"
-import { useForm } from "react-hook-form"
+import { TYPE_NEW_BOOKING, TYPE_VENUE } from "@/lib/definitions"
+import { handleErrors } from "@/lib/handle-errors"
+import { cn, numToDollarString } from "@/lib/utils"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { format } from "date-fns"
+import { CalendarIcon, RefreshCw } from "lucide-react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { ChangeEvent, memo, useEffect, useState, useTransition } from "react"
+import { DateRange } from "react-day-picker"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
+import { z } from "zod"
+import { Button, buttonVariants } from "../ui/button"
+import { Calendar } from "../ui/calendar"
 import { Form, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
 import { Input } from "../ui/input"
-import BookVenue from "@/app/actions/venue/book"
-import { toast } from "sonner"
-import { handleErrors } from "@/lib/handle-errors"
-import { useRouter } from "next/navigation"
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 import { useUser } from "../user-provider"
-import Link from "next/link"
 
 type props = {
   data: TYPE_VENUE
@@ -50,6 +51,8 @@ const apiSchema = BookingSchema.transform((data) => {
 
 function BookingForm({ data }: props) {
   const isMobile = useMediaQuery("(max-width:768px)")
+  const [isPending, startTransition] = useTransition()
+  const [date, setDate] = useState<DateRange | undefined>(undefined)
   const router = useRouter()
   const { user } = useUser()
   const form = useForm<TYPE_NEW_BOOKING>({
@@ -66,32 +69,36 @@ function BookingForm({ data }: props) {
       window.document.querySelector("form")?.scrollIntoView()
   }, [form.formState.errors, isMobile])
 
-  async function onSubmit(formData: z.infer<typeof BookingSchema>) {
-    const formattedData = apiSchema.parse(formData)
-    const { success, error, source } = await BookVenue(formattedData)
+  function onSubmit(formData: z.infer<typeof BookingSchema>) {
+    if (!user) return router.push("/login")
+    startTransition(async () => {
+      const formattedData = apiSchema.parse(formData)
+      const { success, error, source } = await BookVenue(formattedData)
 
-    if (success)
-      toast.success("Happy Holidaze! 🎉", {
-        description: (
-          <p>
-            You have booked{" "}
-            <span className="font-semibold underline">{data.name}</span> from{" "}
-            <span className="font-semibold underline">
-              {formattedData.dateFrom.toDateString()}
-            </span>{" "}
-            to{" "}
-            <span className="font-semibold underline">
-              {formattedData.dateTo.toDateString()}
-            </span>
-          </p>
-        ),
-        duration: 8000,
-        action: {
-          label: "Ok",
-          onClick: () => null,
-        },
-      })
-    else handleErrors(error, source)
+      if (success) {
+        toast.success("Happy Holidaze! 🎉", {
+          description: (
+            <p>
+              You have booked{" "}
+              <span className="font-semibold underline">{data.name}</span> from{" "}
+              <span className="font-semibold underline">
+                {formattedData.dateFrom.toDateString()}
+              </span>{" "}
+              to{" "}
+              <span className="font-semibold underline">
+                {formattedData.dateTo.toDateString()}
+              </span>
+            </p>
+          ),
+          duration: 8000,
+          action: {
+            label: "Ok",
+            onClick: () => null,
+          },
+        })
+        router.push(`/user/${user.name}?tab=bookings`)
+      } else handleErrors(error, source)
+    })
   }
 
   function handleGuests(event: ChangeEvent<HTMLInputElement>) {
@@ -107,10 +114,15 @@ function BookingForm({ data }: props) {
       <form
         id="booking"
         onSubmit={form.handleSubmit(onSubmit)}
-        className="pb-24"
+        className="mx-auto pb-24 md:container"
       >
-        <div className="container flex flex-col gap-5 px-4">
-          <h2>Reservation</h2>
+        <div className="flex flex-col gap-5 px-4">
+          <div>
+            <h2>Reservation</h2>
+            <p className="text-muted-foreground hidden text-sm md:block">
+              {numToDollarString(data.price)} a night
+            </p>
+          </div>
           <FormField
             control={form.control}
             name="dateRange"
@@ -148,7 +160,10 @@ function BookingForm({ data }: props) {
                       {...field}
                       mode="range"
                       selected={field.value}
-                      onSelect={field.onChange}
+                      onSelect={(range, selectedDay, e) => {
+                        field.onChange(range, selectedDay, e)
+                        setDate(range)
+                      }}
                       disabled={(date) =>
                         date < new Date(new Date().setHours(0, 0, 0, 0)) ||
                         data.bookings.some(
@@ -211,13 +226,32 @@ function BookingForm({ data }: props) {
               </>
             )}
           />
+          <Button
+            disabled={isPending}
+            className="hidden w-full cursor-pointer md:flex"
+          >
+            {isPending ? <RefreshCw className="animate-spin" /> : "Book Now"}
+          </Button>
         </div>
         <div className="bg-background fixed bottom-0 z-[9999] flex h-[59px] w-full items-center justify-between gap-4 px-2 drop-shadow-[0px_5px_8px_gray] md:hidden">
           <div className="space-y-2 px-2 text-sm whitespace-nowrap">
             <p className="font-semibold">
               {numToDollarString(data.price)} / night
             </p>
-            <p>Sep 23 - Dec 10</p>
+            <p className="min-w-36">
+              {" "}
+              {date?.from ? (
+                date.to ? (
+                  <>
+                    {format(date?.from, "LLL dd")} - {format(date.to, "LLL dd")}
+                  </>
+                ) : (
+                  <>{format(date.from, "LLL dd")} - Check out</>
+                )
+              ) : (
+                "Check in / Check out"
+              )}
+            </p>
           </div>
           <div className="flex w-full items-center justify-center">
             {user ? (
