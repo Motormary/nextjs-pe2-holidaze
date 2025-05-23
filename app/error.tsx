@@ -15,10 +15,10 @@ export default function Error({
 
   return (
     <main className="flex w-full grow items-center justify-center gap-6">
-      <h2>500</h2>
+      <h2>404</h2>
       <Separator decorative orientation="vertical" className="h-16" />
       <div className="flex flex-col items-center gap-2">
-        <p>Something went wrong</p>
+        <p>{error.message}</p>
         <Button
           size="sm"
           variant="destructive"
