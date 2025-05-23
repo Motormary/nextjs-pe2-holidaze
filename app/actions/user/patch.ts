@@ -2,10 +2,10 @@
 
 import { API_USERS } from "@/lib/constants"
 import {
-  TYPE_GET_USER,
-  Method,
-  TYPE_USER_EDIT,
   CacheTags,
+  Method,
+  TYPE_GET_USER,
+  TYPE_USER_EDIT,
 } from "@/lib/definitions"
 import { verifySession } from "@/lib/session"
 import { failedToVerify } from "@/lib/utils"

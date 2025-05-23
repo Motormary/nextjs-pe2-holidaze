@@ -122,7 +122,7 @@ export type TYPE_USER_LOGIN = {
 }
 
 export type TYPE_USER_EDIT = {
-  bio: string
+  bio?: string
   avatar: TYPE_MEDIA
 }
 

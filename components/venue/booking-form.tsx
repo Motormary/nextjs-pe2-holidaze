@@ -17,7 +17,14 @@ import { toast } from "sonner"
 import { z } from "zod"
 import { Button, buttonVariants } from "../ui/button"
 import { Calendar } from "../ui/calendar"
-import { Form, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form"
 import { Input } from "../ui/input"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 import { useUser } from "../user-provider"
@@ -131,29 +138,32 @@ function BookingForm({ data }: props) {
                 <FormLabel>Date</FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
-                    <Button
-                      variant={"outline"}
-                      className={cn(
-                        "pl-3 text-left font-normal",
-                        !field.value && "text-muted-foreground",
-                      )}
-                    >
-                      {field.value?.from ? (
-                        field.value.to ? (
-                          <>
-                            {format(field.value.from, "LLL dd, y")} -{" "}
-                            {format(field.value.to, "LLL dd, y")}
-                          </>
+                    <FormControl>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "pl-3 text-left font-normal",
+                          !field.value && "text-muted-foreground",
+                        )}
+                      >
+                        {field.value?.from ? (
+                          field.value.to ? (
+                            <>
+                              {format(field.value.from, "LLL dd, y")} -{" "}
+                              {format(field.value.to, "LLL dd, y")}
+                            </>
+                          ) : (
+                            <>
+                              {format(field.value.from, "LLL dd, y")} - Check
+                              out
+                            </>
+                          )
                         ) : (
-                          <>
-                            {format(field.value.from, "LLL dd, y")} - Check out
-                          </>
-                        )
-                      ) : (
-                        "Check in / Check out"
-                      )}
-                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                    </Button>
+                          "Check in / Check out"
+                        )}
+                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                      </Button>
+                    </FormControl>
                   </PopoverTrigger>
                   <PopoverContent className="z-[9999] w-auto p-0" align="start">
                     <Calendar
