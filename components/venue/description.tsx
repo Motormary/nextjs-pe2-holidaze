@@ -35,7 +35,7 @@ function Description({ description }: props) {
         ref={paragraphRef}
         className={cn(
           !readMore && "line-clamp-3",
-          "text-secondary-foreground whitespace-pre-line",
+          "text-secondary-foreground break-words whitespace-pre-line",
         )}
       >
         {description}

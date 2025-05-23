@@ -33,8 +33,15 @@ export default async function VenuePage({ params }: props) {
         <div className="lg:col-span-2">
           <div className="mx-auto space-y-4 p-4">
             <div className="space-y-1">
-              <h1>{data.data.name}</h1>
-              <p className="text-muted-foreground text-sm">
+              <h1 title={data.data.name} className="truncate">
+                {data.data.name}
+              </h1>
+              <p
+                title={
+                  data.data.location.address + " " + data.data.location.city
+                }
+                className="text-muted-foreground line-clamp-2 text-sm break-all"
+              >
                 {data.data.location.address}, {data.data.location.city}
               </p>
             </div>
