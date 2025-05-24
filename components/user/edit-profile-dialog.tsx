@@ -37,9 +37,12 @@ function EditProfileDialog({ data }: props) {
 
   if (isDesktop) {
     return (
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog open={open} onOpenChange={setOpen} modal={false}>
         <DialogTrigger
-          className={cn(buttonVariants({ variant: "secondary" }), "w-full")}
+          className={cn(
+            buttonVariants({ variant: "secondary" }),
+            "w-full md:max-w-52",
+          )}
         >
           Edit Profile
         </DialogTrigger>

@@ -68,6 +68,7 @@ export const columns: ColumnDef<TYPE_BOOKING>[] = [
     ),
   },
   {
+    enableHiding: true,
     header: "Cancel Booking",
     cell: ({ row }) => {
       function handleCancel() {

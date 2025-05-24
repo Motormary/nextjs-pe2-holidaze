@@ -72,7 +72,7 @@ export default function NavMenu() {
             <DropdownMenuItem asChild>
               <Link
                 className="flex justify-between"
-                href={`/user/${user.name}`}
+                href={`/user/${user.name}#bookings`}
               >
                 Bookings <List />
               </Link>

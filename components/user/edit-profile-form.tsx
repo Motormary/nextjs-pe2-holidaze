@@ -19,7 +19,7 @@ import { Button } from "../ui/button"
 import updateUser from "@/app/actions/user/patch"
 import { useUser } from "../user-provider"
 import { handleErrors } from "@/lib/handle-errors"
-import { RefreshCw } from "lucide-react"
+import ActionButton from "../ui/action-button"
 
 type props = {
   data: TYPE_USER_EDIT
@@ -88,9 +88,7 @@ function EditProfileForm({ data, setOpen }: props) {
           <DialogTrigger asChild>
             <Button variant="outline">Cancel</Button>
           </DialogTrigger>
-          <Button disabled={isPending}>
-            {isPending ? <RefreshCw className="animate-spin" /> : "Save"}
-          </Button>
+          <ActionButton isPending={isPending}>Save</ActionButton>
         </DialogFooter>
       </form>
     </Form>
