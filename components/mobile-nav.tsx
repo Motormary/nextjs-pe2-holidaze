@@ -5,9 +5,8 @@ import { cn } from "@/lib/utils"
 import { format } from "date-fns/format"
 import { CalendarIcon, Compass, Loader2, UserCircle } from "lucide-react"
 import Link from "next/link"
-import { useParams, useRouter, useSearchParams } from "next/navigation"
-import { ChangeEvent, memo, useState, useTransition } from "react"
-import { DateRange } from "react-day-picker"
+import { useParams } from "next/navigation"
+import { memo } from "react"
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 import { Button } from "./ui/button"
 import { Calendar } from "./ui/calendar"
@@ -22,63 +21,30 @@ import { Input } from "./ui/input"
 import { Label } from "./ui/label"
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
 import SearchIcon from "./ui/search-icon"
+import useQuery from "@/hooks/use-query"
 
 function MobileNav() {
-  const [open, setOpen] = useState(false)
-  const [date, setDate] = useState<DateRange | undefined>(undefined)
-  const [adults, setAdults] = useState(0)
-  const [childrens, setChildren] = useState(0)
-  const searchParams = useSearchParams()
   const { id } = useParams()
-  const defaultQueryValue = searchParams.get("q")
-
-  const [isPending, startTransition] = useTransition()
-  const [query, setQuery] = useState<string | undefined>(
-    defaultQueryValue ? defaultQueryValue : "",
-  )
-  const router = useRouter()
+  const {
+    query,
+    isPending,
+    date,
+    adults,
+    childrens,
+    open,
+    handleInput,
+    handleClear,
+    handleQuery,
+    handleGuests,
+    setOpen,
+    setAdults,
+    setChildren,
+    setDate,
+  } = useQuery()
   const { user } = useUser()
 
   function toggleDrawer() {
     setOpen(!open)
-  }
-
-  function handleGuests(event: ChangeEvent<HTMLInputElement>) {
-    const value = event.target.value
-    const isNum = /^\d+$/.test(value)
-
-    if (event.currentTarget.id === "adults") {
-      if (!value) setAdults(0)
-      else if (isNum) setAdults(Number(value))
-    } else {
-      if (!value) setChildren(0)
-      if (isNum) setChildren(Number(value))
-    }
-  }
-
-  function handleInput(event: ChangeEvent<HTMLInputElement>) {
-    setQuery(event.currentTarget.value)
-  }
-
-  function handleQuery() {
-    startTransition(() => {
-      setOpen(false)
-      router.push(`/?q=${query}`)
-    })
-  }
-
-  function handleClear() {
-    setQuery("")
-    setDate(undefined)
-    setAdults(0)
-    setChildren(0)
-
-    if (defaultQueryValue) {
-      startTransition(() => {
-        setOpen(false)
-        router.push("/")
-      })
-    }
   }
 
   if (id) return null
@@ -244,7 +210,13 @@ function MobileNav() {
                 </div>
               </div>
             </div>
-            <Button disabled={isPending} onClick={handleQuery}>
+            <Button
+              disabled={isPending}
+              onClick={() => {
+                handleQuery()
+                setOpen(false)
+              }}
+            >
               {isPending ? (
                 <Loader2 className="size-5 animate-spin" />
               ) : (

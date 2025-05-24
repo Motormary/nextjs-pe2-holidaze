@@ -10,92 +10,82 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu"
-import { useScrolledFromTop } from "@/hooks/use-scroll"
 import { cn } from "@/lib/utils"
 import { format } from "date-fns"
 import { Loader2, Search, X } from "lucide-react"
 import { AnimatePresence, motion } from "motion/react"
 import Link from "next/link"
-import { useRouter, useSearchParams } from "next/navigation"
-import { ChangeEvent, memo, useRef, useState, useTransition } from "react"
-import { DateRange } from "react-day-picker"
+import { memo, useRef, useState, useEffect } from "react"
 import NavMenu from "./nav-menu"
 import { Calendar } from "./ui/calendar"
 import { useMediaQuery } from "@/hooks/use-media-query"
-
-/* Backend does not support guests and check in filtering, so they are merely placeholders */
+import { useScroll } from "@/hooks/use-scroll"
+import useQuery from "@/hooks/use-query"
 
 function TopNav() {
-  const router = useRouter()
   const inputRef = useRef<null | HTMLInputElement>(null)
 
-  const scrolled = useScrolledFromTop(0)
+  const { scrolled, isClient } = useScroll(0)
   const isDesktop = useMediaQuery("(min-width:1024px)")
   const animateWidth = scrolled && !isDesktop
 
-  const searchParams = useSearchParams()
-  const defaultQueryValue = searchParams.get("q")
+  const {
+    query,
+    isPending,
+    date,
+    adults,
+    childrens,
+    open,
+    handleInput,
+    handleClear,
+    handleQuery,
+    handleGuests,
+    setOpen,
+    setAdults,
+    setChildren,
+    setDate,
+  } = useQuery()
 
-  const [isPending, startTransition] = useTransition()
-  const [query, setQuery] = useState<string | undefined>(
-    defaultQueryValue ? defaultQueryValue : "",
-  )
-  const [open, setOpen] = useState(query ? true : false)
-  const [date, setDate] = useState<DateRange | undefined>(undefined)
-  const [adults, setAdults] = useState(0)
-  const [childrens, setChildren] = useState(0)
+  // Prevent layout shift during hydration
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
-  function handleInput(event: ChangeEvent<HTMLInputElement>) {
-    setQuery(event.currentTarget.value)
-  }
   function handleBlur() {
     if (query) return
     else setOpen(false)
   }
-  function handleClear() {
-    setQuery("")
-    setDate(undefined)
-    setAdults(0)
-    setChildren(0)
 
-    if (defaultQueryValue) {
-      startTransition(() => {
-        setOpen(false)
-        router.push("/")
-      })
-    }
-  }
-
-  function handleQuery() {
-    startTransition(() => {
-      router.push(`/?q=${query}`)
-    })
-  }
-
-  function handleGuests(event: ChangeEvent<HTMLInputElement>) {
-    const value = event.target.value
-    const isNum = /^\d+$/.test(value)
-
-    if (isNum && Number(value) >= 100) return
-
-    if (event.currentTarget.id === "adults") {
-      if (!value) setAdults(0)
-      else if (isNum) setAdults(Number(value))
-    } else {
-      if (!value) setChildren(0)
-      if (isNum) setChildren(Number(value))
-    }
+  if (!mounted || !isClient) {
+    return (
+      <nav className="peer bg-background h-[142px] w-full py-1.5 max-md:hidden">
+        <div className="bg-background fixed top-0 z-50 flex h-[142px] w-full flex-col">
+          <div className="bg-background container mx-auto flex min-h-[70px] justify-between px-4 py-2">
+            <Link href="/" className="content-center">
+              <picture className="size-8">
+                <img className="h-6" src="/holi-logo.png" alt="logo" />
+              </picture>
+            </Link>
+            <div className="flex items-center gap-4">
+              <NavMenu />
+            </div>
+          </div>
+          <div className="outline-muted mb-5 w-full outline transition-colors" />
+          <div className="mx-auto flex min-h-[54px] w-[668px] justify-center rounded-full border shadow-sm"></div>
+        </div>
+      </nav>
+    )
   }
 
   return (
     <nav
       data-search={isPending ? "" : undefined}
-      className={"peer bg-background h-[142px] w-full py-1.5 max-md:hidden"}
+      className="peer bg-background h-[142px] w-full py-1.5 max-md:hidden"
     >
       <motion.div
-        initial={scrolled ? { height: "70px" } : { height: "142px" }}
+        initial={false}
         animate={scrolled ? { height: "70px" } : { height: "142px" }}
-        transition={{ bounceDamping: 8, duration: 0.5 }}
         className={cn(
           scrolled && "shadow-md",
           "bg-background fixed top-0 z-50 flex w-full flex-col",
@@ -127,15 +117,17 @@ function TopNav() {
             margin: "0 auto",
             minHeight: "54px",
           }}
-          initial={{
-            translateY: scrolled ? "-82px" : "0px",
-            width: animateWidth ? "380px" : "668px",
-          }}
+          initial={false}
           animate={{
             translateY: scrolled ? "-82px" : "0px",
             width: animateWidth ? "380px" : "668px",
           }}
-          transition={{ bounceDamping: 8, duration: 0.5 }}
+          transition={{
+            type: "spring",
+            stiffness: 300,
+            damping: 30,
+            mass: 0.8,
+          }}
           className="mx-auto flex justify-center rounded-full border shadow-sm"
         >
           <NavigationMenu>
@@ -315,7 +307,6 @@ function TopNav() {
                           ref={inputRef}
                           onBlur={handleBlur}
                           onKeyDown={({ key }) => {
-                            console.log(key)
                             if (key === "Enter") handleQuery()
                           }}
                           name="q"
