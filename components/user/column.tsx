@@ -10,7 +10,9 @@ import cancelBooking from "@/app/actions/venue/cancel"
 
 export const columns: ColumnDef<TYPE_BOOKING>[] = [
   {
-    accessorKey: "image",
+    accessorFn: (row) => row.venue.name,
+    filterFn: "includesString",
+    accessorKey: "venue",
     header: () => <p className="text-left">Venue</p>,
     cell: ({ row }) => {
       return (
@@ -20,11 +22,11 @@ export const columns: ColumnDef<TYPE_BOOKING>[] = [
             className="absolute inset-0 z-10 focus:outline-none"
             href={`/venue/${row.original.venue.id}`}
           />
-          <div className="ring-ring ring-offset-background relative flex size-16 items-center overflow-hidden rounded-lg ring-offset-2 group-focus-within:ring">
+          <div className="ring-ring ring-offset-background relative flex size-16 min-w-16 items-center overflow-hidden rounded-lg ring-offset-2 group-focus-within:ring">
             <Image
               width={200}
               height={200}
-              className="h-full w-full rounded-lg object-cover"
+              className="h-full w-full min-w-16 rounded-lg object-cover"
               src={row.original.venue.media[0]?.url ?? altImg.src}
               alt={row.original.venue.media[0]?.alt ?? "Alt text"}
             />
