@@ -1,6 +1,6 @@
 "use client"
 
-import BookVenue from "@/app/actions/venue/book"
+import bookVenue from "@/app/actions/venue/book"
 import { useMediaQuery } from "@/hooks/use-media-query"
 import { TYPE_NEW_BOOKING, TYPE_VENUE } from "@/lib/definitions"
 import { handleErrors } from "@/lib/handle-errors"
@@ -80,7 +80,7 @@ function BookingForm({ data }: props) {
     if (!user) return router.push("/login")
     startTransition(async () => {
       const formattedData = apiSchema.parse(formData)
-      const { success, error, source } = await BookVenue(formattedData)
+      const { success, error, source } = await bookVenue(formattedData)
 
       if (success) {
         toast.success("Happy Holidaze! 🎉", {

@@ -1,5 +1,6 @@
 import { getUser } from "@/app/actions/user/get"
 import Avatar from "@/components/next-avatar"
+import BookingTable from "@/components/user/booking-table"
 import EditProfileDialog from "@/components/user/edit-profile-dialog"
 import { checkAndThrowError } from "@/lib/handle-errors"
 
@@ -33,9 +34,7 @@ export default async function UserPage({ params }: props) {
           </span>
         </h2>
         <div>
-          {data.data.bookings.map((booking) => {
-            return <div key={booking.id}>{booking.venue.name}</div>
-          })}
+          <BookingTable data={data.data.bookings} />
         </div>
       </div>
     </main>
