@@ -69,12 +69,12 @@ export default async function VenuePage({ params }: props) {
             <div className="space-y-5 [&_svg]:size-5 [&>div]:flex [&>div]:items-center [&>div]:gap-2 [&>div]:text-sm">
               <h2>Resources</h2>
               <div>
-                <Users className="stroke-blue-500" />
+                <Users />
                 {data.data.maxGuests} Guests
               </div>
               <div>
                 {data.data.meta.wifi ? (
-                  <Wifi className="stroke-blue-500" />
+                  <Wifi />
                 ) : (
                   <X className="stroke-red-500" />
                 )}
@@ -84,7 +84,7 @@ export default async function VenuePage({ params }: props) {
               </div>
               <div>
                 {data.data.meta.parking ? (
-                  <Car className="stroke-blue-500" />
+                  <Car />
                 ) : (
                   <X className="stroke-red-500" />
                 )}
@@ -94,7 +94,7 @@ export default async function VenuePage({ params }: props) {
               </div>
               <div>
                 {data.data.meta.breakfast ? (
-                  <Coffee className="stroke-blue-500" />
+                  <Coffee />
                 ) : (
                   <X className="stroke-red-500" />
                 )}
@@ -106,7 +106,7 @@ export default async function VenuePage({ params }: props) {
               </div>
               <div>
                 {data.data.meta.pets ? (
-                  <PawPrint className="stroke-blue-500" />
+                  <PawPrint />
                 ) : (
                   <X className="stroke-red-500" />
                 )}
