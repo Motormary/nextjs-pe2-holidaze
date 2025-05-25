@@ -5,6 +5,11 @@ import { bookingColumns } from "@/components/user/booking-column"
 import EditProfileDialog from "@/components/user/edit-profile-dialog"
 import { checkAndThrowError } from "@/lib/handle-errors"
 import { venueColumns } from "@/components/user/venue-column"
+import VenueDialog from "@/components/venue/new-venue-dialog"
+import { DialogTrigger } from "@/components/ui/dialog"
+import { cn } from "@/lib/utils"
+import { buttonVariants } from "@/components/ui/button"
+import SignOut from "@/components/user/sign-out"
 
 type props = {
   params: Promise<{ user: string }>
@@ -47,12 +52,24 @@ export default async function UserPage({ params }: props) {
         </div>
         {currentUser.data.name !== user || currentUser.data.venueManager ? (
           <div id="venues" className="space-y-4">
-            <h2>
-              Venues{" "}
-              <span className="text-sm font-normal">
-                {data.data._count.venues}
-              </span>
-            </h2>
+            <div className="flex justify-between">
+              <h2>
+                Venues{" "}
+                <span className="text-sm font-normal">
+                  {data.data._count.venues}
+                </span>
+              </h2>
+              <div className="flex flex-col gap-2 sm:flex-row md:hidden">
+                <VenueDialog>
+                  <DialogTrigger
+                    className={cn(buttonVariants({ variant: "default" }))}
+                  >
+                    Add new venue
+                  </DialogTrigger>
+                </VenueDialog>
+                <SignOut />
+              </div>
+            </div>
             <DataTable
               currentUser={currentUser.data.name === user}
               columns={venueColumns}
