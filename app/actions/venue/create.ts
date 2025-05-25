@@ -27,6 +27,7 @@ export default async function createVenue(
   }
 
   revalidateTag(CacheTags.ALL_VENUES)
+  revalidateTag(CacheTags.USER + session.user)
   revalidateTag(CacheTags.USER_VENUES + session.user)
 
   return { ...res }

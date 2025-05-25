@@ -41,7 +41,7 @@ export default async function deleteVenue({ id, owner }: props) {
     console.error("⚡ deleteVenue ~ Error deleting venue:", res)
     return res
   }
-
+  revalidateTag(CacheTags.USER + session.user)
   revalidateTag(CacheTags.ALL_VENUES)
   revalidateTag(CacheTags.USER_VENUES + session.user)
   revalidateTag(CacheTags.VENUE + id)
