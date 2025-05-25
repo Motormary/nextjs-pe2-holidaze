@@ -35,7 +35,7 @@ export default async function UserPage({ params }: props) {
           </div>
           <div className="flex w-fit flex-col items-center gap-2 md:items-start">
             <h1 className="rounded-full bg-black/50 px-4 text-white text-shadow-lg">
-              {user}asdfsf
+              {user}
             </h1>
             <div className="mx-auto">
               <EditProfileDialog data={data.data} />
