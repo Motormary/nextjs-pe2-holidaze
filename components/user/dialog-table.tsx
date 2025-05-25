@@ -49,7 +49,10 @@ export default function DialogTable<TData, TValue>({
   })
   return (
     <>
-      <div className="overflow-y-scroll rounded-md border">
+      <div
+        style={{ scrollbarWidth: "thin" }}
+        className="overflow-y-auto rounded-md border"
+      >
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

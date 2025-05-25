@@ -2,7 +2,7 @@ import getVenue from "@/app/actions/venue/get"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Skeleton } from "@/components/ui/skeleton"
 import BackButton from "@/components/venue/back-button"
-import BookingForm from "@/components/venue/booking-form"
+import BookingOrTable from "@/components/venue/conditional-booking-form"
 import Description from "@/components/venue/description"
 import Map from "@/components/venue/dynamic-map"
 import MediaGallery from "@/components/venue/media-gallery"
@@ -29,8 +29,8 @@ export default async function VenuePage({ params }: props) {
       <Suspense fallback={<Loading />}>
         <MediaGallery media={data.data.media} id={id} />
       </Suspense>
-      <div className="md:grid md:grid-cols-2 lg:grid-cols-3">
-        <div className="lg:col-span-2">
+      <div className="md:grid md:grid-cols-2 lg:grid-cols-5">
+        <div className="lg:col-span-3">
           <div className="mx-auto space-y-4 p-4">
             <div className="space-y-1">
               <h1 title={data.data.name} className="truncate">
@@ -143,9 +143,7 @@ export default async function VenuePage({ params }: props) {
             ) : null}
           </div>
         </div>
-        <div className="py-4">
-          <BookingForm data={data.data} />
-        </div>
+        <BookingOrTable data={data.data} />
       </div>
     </main>
   )
