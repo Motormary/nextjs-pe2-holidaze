@@ -27,7 +27,7 @@ interface DataTableProps<TData, TValue> {
   data: TData[]
 }
 
-export default function BookingTable<TData, TValue>({
+export default function DialogTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {

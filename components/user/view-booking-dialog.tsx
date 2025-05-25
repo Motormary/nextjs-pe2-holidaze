@@ -22,7 +22,7 @@ import { TYPE_VENUE } from "@/lib/definitions"
 import React, { useEffect, useState, useTransition } from "react"
 import { Skeleton } from "../ui/skeleton"
 import { Button } from "../ui/button"
-import BookingTable from "./dialog-table"
+import DialogTable from "./dialog-table"
 import { dialogColumns } from "./dialog-columns"
 
 type props = {
@@ -64,7 +64,7 @@ function ViewBookingsDialog({ venueId, open, setOpen }: props) {
               <Skeleton className="h-44 w-full" />
             </div>
           ) : venueData?.bookings ? (
-            <BookingTable columns={dialogColumns} data={venueData.bookings} />
+            <DialogTable columns={dialogColumns} data={venueData.bookings} />
           ) : null}
           <DialogFooter>
             <DialogTrigger asChild>
@@ -90,7 +90,7 @@ function ViewBookingsDialog({ venueId, open, setOpen }: props) {
             <Skeleton className="h-44 w-full" />
           </div>
         ) : venueData?.bookings ? (
-          <BookingTable columns={dialogColumns} data={venueData.bookings} />
+          <DialogTable columns={dialogColumns} data={venueData.bookings} />
         ) : null}
       </DrawerContent>
     </Drawer>

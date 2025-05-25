@@ -26,6 +26,7 @@ import { useState, useTransition } from "react"
 import { toast } from "sonner"
 import { Button } from "../ui/button"
 import Stepper from "./stepper"
+import { Switch } from "../ui/switch"
 
 type props = {
   closeModal: (state: boolean) => void
@@ -271,6 +272,79 @@ export default function VenueForm({ closeModal, initialData }: props) {
                 </FormItem>
               )}
             />
+          </div>
+          <div className="hidden space-y-6 group-data-[state=3]:block">
+            <p className="text-sm font-semibold">Resources</p>
+            <div className="grid rounded-lg border sm:grid-cols-2">
+              <FormField
+                control={form.control}
+                name="meta.wifi"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-start p-4">
+                    <FormControl>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <div className="mt-0.5">
+                      <FormLabel>Wifi</FormLabel>
+                    </div>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="meta.breakfast"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-start p-4">
+                    <FormControl>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <div className="mt-0.5">
+                      <FormLabel>Breakfast</FormLabel>
+                    </div>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="meta.parking"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-start p-4">
+                    <FormControl>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <div className="mt-0.5">
+                      <FormLabel>Parking</FormLabel>
+                    </div>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="meta.pets"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-start p-4">
+                    <FormControl>
+                      <Switch
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <div className="mt-0.5">
+                      <FormLabel>Pets</FormLabel>
+                    </div>
+                  </FormItem>
+                )}
+              />
+            </div>
           </div>
           <div className="hidden space-y-6 group-data-[state=2]:block">
             <FormField

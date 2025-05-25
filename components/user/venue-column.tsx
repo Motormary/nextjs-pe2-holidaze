@@ -130,7 +130,7 @@ export const venueColumns: ColumnDef<TYPE_VENUE>[] = [
                 <List className="text-secondary-foreground bg-background size-5" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-44">
+            <DropdownMenuContent className="z-[9999] w-44">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>

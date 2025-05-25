@@ -1,10 +1,9 @@
 "use client"
 
-import cancelBooking from "@/app/actions/venue/cancel"
 import { TYPE_BOOKING } from "@/lib/definitions"
 import { ColumnDef } from "@tanstack/react-table"
 import { format } from "date-fns"
-import { ArrowUpDown, X } from "lucide-react"
+import { ArrowUpDown } from "lucide-react"
 import { Button } from "../ui/button"
 import Link from "next/link"
 
@@ -69,29 +68,5 @@ export const dialogColumns: ColumnDef<TYPE_BOOKING>[] = [
         {format(row.original.created, "PPP")}
       </p>
     ),
-  },
-  {
-    enableHiding: true,
-    header: "Cancel Booking",
-    id: "action",
-    cell: ({ row }) => {
-      function handleCancel() {
-        cancelBooking(row.original.id)
-      }
-      return (
-        <div className="flex items-center">
-          <Button
-            title="Cancel Booking"
-            size="icon"
-            variant="ghost"
-            onClick={handleCancel}
-            className="mx-auto"
-          >
-            <p className="sr-only">Delete booking</p>
-            <X />
-          </Button>
-        </div>
-      )
-    },
   },
 ]

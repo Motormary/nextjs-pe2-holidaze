@@ -59,7 +59,7 @@ export default function LoginCard({ className, closeModal }: props) {
 
   async function onSubmit(formData: TYPE_USER_LOGIN) {
     setIsPending(true)
-    const { success, source, error, data } = await loginUser(formData)
+    const { success, source, error } = await loginUser(formData)
     setIsPending(false)
 
     if (!success) {
@@ -69,7 +69,12 @@ export default function LoginCard({ className, closeModal }: props) {
       if (closeModal) {
         closeModal(false)
       } else {
-        setUser(data.data)
+        const userData = await fetch("/api/user")
+          .then((res) => res.json())
+          .catch(() => null)
+
+        setUser(userData)
+
         router.push("/")
       }
     }
