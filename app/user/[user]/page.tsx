@@ -43,9 +43,8 @@ export default async function UserPage({ params }: props) {
         <div className="overflow-hidden">
           <p className="line-clamp-3">{data.data.bio}</p>
         </div>
-        {currentUser.data.name !== user ||
-        (currentUser.data.name === user && currentUser.data.venueManager) ? (
-          <div className="space-y-4">
+        {currentUser.data.name !== user || currentUser.data.venueManager ? (
+          <div id="venues" className="space-y-4">
             <h2>
               Venues{" "}
               <span className="text-sm font-normal">
@@ -53,7 +52,7 @@ export default async function UserPage({ params }: props) {
               </span>
             </h2>
             <DataTable
-              currentUser={currentUser.data.name !== user}
+              currentUser={currentUser.data.name === user}
               columns={venueColumns}
               data={data.data.venues}
             />
