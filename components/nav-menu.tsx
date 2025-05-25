@@ -12,21 +12,17 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
 import { DropdownMenuGroup } from "@radix-ui/react-dropdown-menu"
-import { List, User } from "lucide-react"
+import { List, Plus, User } from "lucide-react"
 import Link from "next/link"
-import { useTransition } from "react"
 import Avatar from "./next-avatar"
 import { useUser } from "./user-provider"
 
 export default function NavMenu() {
   const { user, setUser } = useUser()
-  const [isPending, startTransition] = useTransition()
 
-  function handleLogout() {
-    startTransition(async () => {
-      setUser(null)
-      await logoutUser()
-    })
+  async function handleLogout() {
+    setUser(null)
+    await logoutUser()
   }
 
   if (!user)
@@ -69,25 +65,34 @@ export default function NavMenu() {
                 Profile <User />
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link
-                className="flex justify-between"
-                href={`/user/${user.name}#bookings`}
-              >
-                Bookings <List />
-              </Link>
-            </DropdownMenuItem>
             {user.venueManager ? (
+              <>
+                <DropdownMenuItem className="flex justify-between">
+                  New venue
+                  <Plus />
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    className="flex justify-between"
+                    href={`/user/${user.name}#venues`}
+                  >
+                    My venues{" "}
+                    <span className="p-0.5 text-xs">
+                      {user?._count?.venues}
+                    </span>
+                  </Link>
+                </DropdownMenuItem>
+              </>
+            ) : (
               <DropdownMenuItem asChild>
                 <Link
                   className="flex justify-between"
-                  href={`/user/${user.name}/venues`}
+                  href={`/user/${user.name}#bookings`}
                 >
-                  My venues{" "}
-                  <span className="p-0.5 text-xs">{user._count.venues}</span>
+                  My Bookings <List />
                 </Link>
               </DropdownMenuItem>
-            ) : null}
+            )}
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>

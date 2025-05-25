@@ -1,8 +1,10 @@
 import { getCurrentUser, getUser } from "@/app/actions/user/get"
 import Avatar from "@/components/next-avatar"
-import BookingTable from "@/components/user/booking-table"
+import DataTable from "@/components/user/data-table"
+import { bookingColumns } from "@/components/user/booking-column"
 import EditProfileDialog from "@/components/user/edit-profile-dialog"
 import { checkAndThrowError } from "@/lib/handle-errors"
+import { venueColumns } from "@/components/user/venue-column"
 
 type props = {
   params: Promise<{ user: string }>
@@ -41,7 +43,8 @@ export default async function UserPage({ params }: props) {
         <div className="overflow-hidden">
           <p className="line-clamp-3">{data.data.bio}</p>
         </div>
-        {currentUser.data.name !== user ? (
+        {currentUser.data.name !== user ||
+        (currentUser.data.name === user && currentUser.data.venueManager) ? (
           <div className="space-y-4">
             <h2>
               Venues{" "}
@@ -49,7 +52,11 @@ export default async function UserPage({ params }: props) {
                 {data.data._count.venues}
               </span>
             </h2>
-            <div>VenueTable</div>
+            <DataTable
+              currentUser={currentUser.data.name !== user}
+              columns={venueColumns}
+              data={data.data.venues}
+            />
           </div>
         ) : (
           <div id="bookings" className="space-y-4">
@@ -60,7 +67,11 @@ export default async function UserPage({ params }: props) {
               </span>
             </h2>
             <div>
-              <BookingTable data={data.data.bookings} />
+              <DataTable
+                currentUser={currentUser.data.name === user}
+                columns={bookingColumns}
+                data={data.data.bookings}
+              />
             </div>
           </div>
         )}

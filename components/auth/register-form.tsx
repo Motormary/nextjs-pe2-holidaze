@@ -28,6 +28,8 @@ import { cn } from "@/lib/utils"
 import { z } from "zod"
 import { useState } from "react"
 import { RefreshCw } from "lucide-react"
+import { useUser } from "../user-provider"
+import { Checkbox } from "../ui/checkbox"
 
 type props = {
   className?: string
@@ -62,6 +64,7 @@ export const RegisterUserSchema = z
     confirm: z.string().min(8, {
       message: "Password must be at least 8 characters.",
     }),
+    venueManager: z.boolean(),
   })
   .refine((data) => data.password === data.confirm, {
     message: "Passwords must match.",
@@ -70,6 +73,7 @@ export const RegisterUserSchema = z
 
 export default function RegisterCard({ className, closeModal }: props) {
   const [isPending, setIsPending] = useState(false)
+  const { user, setUser } = useUser()
   const router = useRouter()
   const form = useForm<z.infer<typeof RegisterUserSchema>>({
     resolver: zodResolver(RegisterUserSchema),
@@ -82,6 +86,7 @@ export default function RegisterCard({ className, closeModal }: props) {
       email: "",
       password: "",
       confirm: "",
+      venueManager: false,
     },
   })
 
@@ -93,6 +98,12 @@ export default function RegisterCard({ className, closeModal }: props) {
     if (!success)
       handleErrors<z.infer<typeof RegisterUserSchema>>(error, source, form)
     if (success) {
+      const userData = await fetch("/api/user")
+        .then((res) => res.json())
+        .catch(() => null)
+
+      setUser(userData)
+
       if (closeModal) {
         closeModal(false)
       } else router.push("/")
@@ -182,6 +193,26 @@ export default function RegisterCard({ className, closeModal }: props) {
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="venueManager"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-start space-y-0 space-x-3 rounded-md border p-4">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>Venue Manager</FormLabel>
+                    <FormDescription>
+                      Create and manage your venues as a manager.
+                    </FormDescription>
+                  </div>
+                </FormItem>
+              )}
+            />
           </CardContent>
           <CardFooter className="mt-6 flex flex-col gap-4">
             <Button disabled={isPending} className="flex w-full" type="submit">
@@ -192,7 +223,7 @@ export default function RegisterCard({ className, closeModal }: props) {
               )}
             </Button>
             <CardDescription>
-              Not registered yet?{" "}
+              Already have an account?{" "}
               <Link className="hover:text-primary font-semibold" href="/login">
                 Sign in!
               </Link>

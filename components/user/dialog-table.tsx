@@ -8,26 +8,31 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { TYPE_BOOKING } from "@/lib/definitions"
 import {
+  ColumnDef,
   ColumnFiltersState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
+  getSortedRowModel,
+  SortingState,
   useReactTable,
 } from "@tanstack/react-table"
-import { columns } from "./column"
-import { Button } from "../ui/button"
 import { useState } from "react"
-import { Input } from "../ui/input"
+import { Button } from "../ui/button"
 
-type props = {
-  data: TYPE_BOOKING[]
+interface DataTableProps<TData, TValue> {
+  columns: ColumnDef<TData, TValue>[]
+  data: TData[]
 }
 
-export default function BookingTable({ data }: props) {
+export default function BookingTable<TData, TValue>({
+  columns,
+  data,
+}: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const [sorting, setSorting] = useState<SortingState>([])
   const table = useReactTable({
     data,
     columns,
@@ -35,22 +40,15 @@ export default function BookingTable({ data }: props) {
     getPaginationRowModel: getPaginationRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
     state: {
+      sorting,
       columnFilters,
     },
   })
   return (
-    <div>
-      <div className="flex items-center py-4">
-        <Input
-          placeholder="Filter venues..."
-          value={(table.getColumn("venue")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("venue")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
-      </div>
+    <>
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -58,7 +56,7 @@ export default function BookingTable({ data }: props) {
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead className="text-center" key={header.id}>
+                    <TableHead className="py-1 text-center" key={header.id}>
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -94,7 +92,9 @@ export default function BookingTable({ data }: props) {
                   colSpan={columns.length}
                   className="h-36 text-center"
                 >
-                  {columnFilters.length ? "No results." : "Nothing here..."}
+                  {columnFilters.length
+                    ? "No results."
+                    : "Nothing to see here..."}
                 </TableCell>
               </TableRow>
             )}
@@ -113,7 +113,7 @@ export default function BookingTable({ data }: props) {
         <div className="px-4 text-center">
           <p className="text-sm">
             Page {table.getState().pagination.pageIndex + 1} of{" "}
-            {table.getPageCount()}
+            {table.getPageCount() ? table.getPageCount() : 1}
           </p>
         </div>
         <Button
@@ -125,6 +125,6 @@ export default function BookingTable({ data }: props) {
           Next
         </Button>
       </div>
-    </div>
+    </>
   )
 }

@@ -1,28 +1,40 @@
+"use client"
+
 import { TYPE_BOOKING } from "@/lib/definitions"
 import { ColumnDef } from "@tanstack/react-table"
 import { format } from "date-fns"
-import { X } from "lucide-react"
+import { ArrowUpDown, X } from "lucide-react"
 import altImg from "public/alt.svg"
 import { Button } from "../ui/button"
 import Link from "next/link"
 import Image from "next/image"
 import cancelBooking from "@/app/actions/venue/cancel"
 
-export const columns: ColumnDef<TYPE_BOOKING>[] = [
+export const bookingColumns: ColumnDef<TYPE_BOOKING>[] = [
   {
     accessorFn: (row) => row.venue.name,
     filterFn: "includesString",
     accessorKey: "venue",
-    header: () => <p className="text-left">Venue</p>,
+    header: ({ column }) => (
+      <div className="flex w-full justify-start">
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Venue
+          <ArrowUpDown className="text-muted-foreground ml-2 h-4 w-4" />
+        </Button>
+      </div>
+    ),
     cell: ({ row }) => {
       return (
-        <div className="group relative flex items-center gap-4">
+        <div className="group relative flex items-center gap-4 p-1">
           <Link
             draggable={false}
             className="absolute inset-0 z-10 focus:outline-none"
             href={`/venue/${row.original.venue.id}`}
           />
-          <div className="ring-ring ring-offset-background relative flex size-16 min-w-16 items-center overflow-hidden rounded-lg ring-offset-2 group-focus-within:ring">
+          <div className="ring-ring ring-offset-background relative flex size-16 items-center justify-center overflow-hidden rounded-lg ring-offset-2 group-focus-within:ring">
             <Image
               width={200}
               height={200}
@@ -48,10 +60,18 @@ export const columns: ColumnDef<TYPE_BOOKING>[] = [
   },
   {
     accessorKey: "dateFrom",
-    header: () => <p>Check in / Check out</p>,
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Check in / Check out
+        <ArrowUpDown className="text-muted-foreground ml-2 h-4 w-4" />
+      </Button>
+    ),
     cell: ({ row }) => {
       return (
-        <div className="flex items-center justify-center overflow-hidden select-none max-md:min-w-36">
+        <div className="flex items-center justify-center overflow-hidden max-md:min-w-36">
           {format(row.original.dateFrom, "PPP")} -{" "}
           {format(row.original.dateTo, "PPP")}
         </div>
@@ -60,9 +80,17 @@ export const columns: ColumnDef<TYPE_BOOKING>[] = [
   },
   {
     accessorKey: "created",
-    header: () => <p>Booking Created</p>,
+    header: ({ column }) => (
+      <Button
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Booking Created
+        <ArrowUpDown className="text-muted-foreground ml-2 h-4 w-4" />
+      </Button>
+    ),
     cell: ({ row }) => (
-      <p aria-label="quantity x price" className="min-w-40 text-center">
+      <p aria-label="quantity x price" className="mr-3 min-w-40 text-center">
         {format(row.original.created, "PPP")}
       </p>
     ),
@@ -70,6 +98,7 @@ export const columns: ColumnDef<TYPE_BOOKING>[] = [
   {
     enableHiding: true,
     header: "Cancel Booking",
+    id: "action",
     cell: ({ row }) => {
       function handleCancel() {
         cancelBooking(row.original.id)
@@ -77,7 +106,7 @@ export const columns: ColumnDef<TYPE_BOOKING>[] = [
       return (
         <div className="flex items-center">
           <Button
-            title="Delete Booking"
+            title="Cancel Booking"
             size="icon"
             variant="ghost"
             onClick={handleCancel}
