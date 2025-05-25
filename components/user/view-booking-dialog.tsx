@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/drawer"
 import { useMediaQuery } from "@/hooks/use-media-query"
 import { TYPE_VENUE } from "@/lib/definitions"
-import React, { useState, useTransition } from "react"
+import React, { useEffect, useState, useTransition } from "react"
 import { Skeleton } from "../ui/skeleton"
 import { Button } from "../ui/button"
 import BookingTable from "./dialog-table"
@@ -27,27 +27,31 @@ import { dialogColumns } from "./dialog-columns"
 
 type props = {
   venueId: string
-  children: React.ReactNode
+  open: boolean
+  setOpen: (state: boolean) => void
 }
 
-function ViewBookingsDialog({ venueId, children }: props) {
-  const [open, setOpen] = React.useState(false)
+function ViewBookingsDialog({ venueId, open, setOpen }: props) {
   const isDesktop = useMediaQuery("(min-width: 768px)")
   const [venueData, setVenueData] = useState<TYPE_VENUE | null>(null)
   const [isPending, startTransition] = useTransition()
 
+  useEffect(() => {
+    if (open) {
+      startTransition(async () => {
+        const { data, success } = await getVenue(venueId)
+        if (success) setVenueData(data.data)
+      })
+    }
+  }, [venueId, open])
+
   function handleOpen(state: boolean) {
     setOpen(state)
-    startTransition(async () => {
-      const { data, success } = await getVenue(venueId)
-      if (success) setVenueData(data.data)
-    })
   }
 
   if (isDesktop) {
     return (
       <Dialog open={open} onOpenChange={handleOpen}>
-        {children}
         <DialogContent className="w-full sm:max-w-3xl">
           <DialogHeader>
             <DialogTitle>Bookings</DialogTitle>
@@ -74,7 +78,6 @@ function ViewBookingsDialog({ venueId, children }: props) {
 
   return (
     <Drawer open={open} onOpenChange={handleOpen}>
-      {children}
       <DrawerContent className="z-[9999]">
         <DrawerHeader className="text-left">
           <DrawerTitle>Bookings</DrawerTitle>

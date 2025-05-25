@@ -117,6 +117,24 @@ export type TYPE_VENUE = {
   bookings: TYPE_BOOKING[]
 }
 
+export type TYPE_NEW_VENUE = {
+  name: string
+  description: string
+  media: TYPE_MEDIA[] | undefined
+  price: number
+  rating: number
+  meta: {
+    wifi: boolean
+    parking: boolean
+    breakfast: boolean
+    pets: boolean
+  }
+  location: {
+    address: string
+    city: string
+  }
+}
+
 export type TYPE_USER_LOGIN = {
   email: string
   password: string

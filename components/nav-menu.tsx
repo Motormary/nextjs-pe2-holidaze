@@ -16,6 +16,8 @@ import { List, Plus, User } from "lucide-react"
 import Link from "next/link"
 import Avatar from "./next-avatar"
 import { useUser } from "./user-provider"
+import VenueDialog from "./venue/new-venue-dialog"
+import { DialogTrigger } from "./ui/dialog"
 
 export default function NavMenu() {
   const { user, setUser } = useUser()
@@ -48,55 +50,59 @@ export default function NavMenu() {
             />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent
-          align="end"
-          sideOffset={12}
-          className="w-56 max-md:hidden"
-        >
-          <DropdownMenuGroup>
-            <DropdownMenuLabel className="truncate overflow-hidden">
-              {user.email}
-            </DropdownMenuLabel>
-            <DropdownMenuItem asChild>
-              <Link
-                className="flex justify-between"
-                href={`/user/${user.name}`}
-              >
-                Profile <User />
-              </Link>
-            </DropdownMenuItem>
-            {user.venueManager ? (
-              <>
-                <DropdownMenuItem className="flex justify-between">
-                  New venue
-                  <Plus />
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link
-                    className="flex justify-between"
-                    href={`/user/${user.name}#venues`}
-                  >
-                    My venues{" "}
-                    <span className="p-0.5 text-xs">
-                      {user?._count?.venues}
-                    </span>
-                  </Link>
-                </DropdownMenuItem>
-              </>
-            ) : (
+        <VenueDialog>
+          <DropdownMenuContent
+            align="end"
+            sideOffset={12}
+            className="w-56 max-md:hidden"
+          >
+            <DropdownMenuGroup>
+              <DropdownMenuLabel className="truncate overflow-hidden">
+                {user.email}
+              </DropdownMenuLabel>
               <DropdownMenuItem asChild>
                 <Link
                   className="flex justify-between"
-                  href={`/user/${user.name}#bookings`}
+                  href={`/user/${user.name}`}
                 >
-                  My Bookings <List />
+                  Profile <User />
                 </Link>
               </DropdownMenuItem>
-            )}
-          </DropdownMenuGroup>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
-        </DropdownMenuContent>
+              {user.venueManager ? (
+                <>
+                  <DropdownMenuItem asChild>
+                    <DialogTrigger className="flex w-full justify-between">
+                      New venue
+                      <Plus />
+                    </DialogTrigger>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link
+                      className="flex justify-between"
+                      href={`/user/${user.name}#venues`}
+                    >
+                      My venues{" "}
+                      <span className="p-0.5 text-xs">
+                        {user?._count?.venues}
+                      </span>
+                    </Link>
+                  </DropdownMenuItem>
+                </>
+              ) : (
+                <DropdownMenuItem asChild>
+                  <Link
+                    className="flex justify-between"
+                    href={`/user/${user.name}#bookings`}
+                  >
+                    My Bookings <List />
+                  </Link>
+                </DropdownMenuItem>
+              )}
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
+          </DropdownMenuContent>
+        </VenueDialog>
       </DropdownMenu>
     )
 }

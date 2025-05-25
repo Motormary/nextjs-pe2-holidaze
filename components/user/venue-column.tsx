@@ -1,9 +1,10 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 "use client"
 
 import { TYPE_VENUE } from "@/lib/definitions"
 import { ColumnDef } from "@tanstack/react-table"
 import { format } from "date-fns"
-import { ArrowUpDown, Book, List, X } from "lucide-react"
+import { ArrowUpDown, Book, Edit, List, X } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import altImg from "public/alt.svg"
@@ -19,7 +20,10 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu"
 import ViewBookingDialog from "./view-booking-dialog"
-import { DialogTrigger } from "../ui/dialog"
+import deleteVenue from "@/app/actions/venue/delete"
+import { useUser } from "../user-provider"
+import { useState } from "react"
+import VenueDialog from "../venue/new-venue-dialog"
 
 export const venueColumns: ColumnDef<TYPE_VENUE>[] = [
   {
@@ -110,37 +114,51 @@ export const venueColumns: ColumnDef<TYPE_VENUE>[] = [
     header: () => <p className="pr-4 text-right">Actions</p>,
     id: "action",
     cell: ({ row }) => {
+      const { user } = useUser()
       async function handleDelete() {
-        alert("deleted")
+        if (!user) return
+        deleteVenue({ id: row.original.id, owner: user.name })
       }
+      const [openBooking, setOpenBooking] = useState(false)
+      const [openEdit, setOpenEdit] = useState(false)
 
       return (
         <div className="flex items-center justify-end pr-6">
-          <ViewBookingDialog venueId={row.original.id}>
-            <DropdownMenu modal={false}>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="">
-                  <List className="text-secondary-foreground bg-background size-5" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-44">
-                <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                  <DropdownMenuItem asChild>
-                    <DialogTrigger className="w-full">
-                      <Book />
-                      View bookings
-                    </DialogTrigger>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={handleDelete}>
-                    <X />
-                    Delete venue
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </ViewBookingDialog>
+          <DropdownMenu modal={false}>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="">
+                <List className="text-secondary-foreground bg-background size-5" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-44">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                <DropdownMenuItem onClick={() => setOpenBooking(true)}>
+                  <Book />
+                  View bookings
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setOpenEdit(true)}>
+                  <Edit />
+                  Edit venue
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleDelete}>
+                  <X />
+                  Delete venue
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <VenueDialog
+            initialData={row.original}
+            isOpen={openEdit}
+            setIsOpen={setOpenEdit}
+          />
+          <ViewBookingDialog
+            open={openBooking}
+            setOpen={setOpenBooking}
+            venueId={row.original.id}
+          />
         </div>
       )
     },
