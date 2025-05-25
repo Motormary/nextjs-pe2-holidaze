@@ -82,7 +82,13 @@ function ViewBookingsDialog({ venueId, children }: props) {
             Table overview
           </DrawerDescription>
         </DrawerHeader>
-        hello
+        {isPending ? (
+          <div className="grid w-full place-items-center">
+            <Skeleton className="h-44 w-full" />
+          </div>
+        ) : venueData?.bookings ? (
+          <BookingTable columns={dialogColumns} data={venueData.bookings} />
+        ) : null}
       </DrawerContent>
     </Drawer>
   )

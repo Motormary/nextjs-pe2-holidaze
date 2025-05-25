@@ -49,7 +49,7 @@ export default function BookingTable<TData, TValue>({
   })
   return (
     <>
-      <div className="rounded-md border">
+      <div className="overflow-y-scroll rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -101,7 +101,7 @@ export default function BookingTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex w-full items-center justify-between space-x-2 py-4 md:justify-end">
+      <div className="flex w-full items-center justify-between space-x-2 p-4 md:justify-end">
         <Button
           variant="outline"
           size="sm"

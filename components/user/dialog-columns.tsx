@@ -28,7 +28,7 @@ export const dialogColumns: ColumnDef<TYPE_BOOKING>[] = [
           title={row.original.customer.name}
           href={`/user/${row.original.customer.name}`}
         >
-          {row.original.customer.name}zzzzzzzzzzzzzzzzzzzzzzz
+          {row.original.customer.name}
         </Link>
       </div>
     ),
