@@ -78,12 +78,17 @@ export default async function UserPage({ params }: props) {
           </div>
         ) : (
           <div id="bookings" className="space-y-4">
-            <h2>
-              Bookings{" "}
-              <span className="text-sm font-normal">
-                {data.data._count.bookings}
-              </span>
-            </h2>
+            <div className="flex justify-between">
+              <h2>
+                Bookings{" "}
+                <span className="text-sm font-normal">
+                  {data.data._count.bookings}
+                </span>
+              </h2>
+              <div className="flex flex-col gap-2 sm:flex-row md:hidden">
+                <SignOut />
+              </div>
+            </div>
             <div>
               <DataTable
                 currentUser={currentUser.data.name === user}
