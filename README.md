@@ -83,9 +83,9 @@ To get started with the project, follow these steps:
     pnpm install
    ```
 
-4. Rename the '.env.example' file inside the root folder to '.env'
+4. Create a '.env' file in the root folder.
 
-5. Use these values:
+5. Add these values:
 
   - API_KEY=235c15a7-c0f5-4925-b6ec-59e3f4e2d081
 
