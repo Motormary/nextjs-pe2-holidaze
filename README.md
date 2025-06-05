@@ -87,9 +87,9 @@ To get started with the project, follow these steps:
 
 5. Use these values:
 
-  API_KEY=235c15a7-c0f5-4925-b6ec-59e3f4e2d081
+  - API_KEY=235c15a7-c0f5-4925-b6ec-59e3f4e2d081
 
-  API_BASE="https://v2.api.noroff.dev"
+  - API_BASE="https://v2.api.noroff.dev"
 
 
 ## Running
