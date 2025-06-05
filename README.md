@@ -1,36 +1,102 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Holidaze
+![image](https://github.com/user-attachments/assets/ce0e7f5a-52da-499b-a9fd-41d037c870c5)
+
+## Overview
+Holidaze is a modern accommodation booking platform designed to connect travelers with unique venues, and empower venue managers to manage their properties effortlessly. Built with performance, responsiveness, and user experience in mind, this project delivers a fully responsive front-end interface for both customers and venue managers.
+
+This is the front-end application developed using the official Noroff API, tailored to meet the brief requirements of Holidaze.
+
+## Description
+Holidaze supports two primary user roles: Customers and Venue Managers. It allows users to browse venues, check availability, book accommodations, and manage venue listings and bookings.
+
+The platform includes:
+- Dual registration types (Customer and Venue Manager) with stud.noroff.no email validation.
+- Browsing, searching, and viewing of venue listings available to all users (including visitors).
+- Calendar integration to display venue availability and booked dates.
+- Secure booking and management features for registered users.
+- Clean UI and responsive design for all devices.
+
+## Features
+### Public (visitor)
+- View list of all venues
+- Search for venues by keyword.
+- View individiual venue details including images and availability calendar.
+
+### Authentication
+- Register using a stud.noroff.no email.
+- Choose user role during registration. Customer or Venue manager.
+- Secure login and logout functionality
+- Encrypted sessions handled via cookies.
+- Middleware+route protection and session updates.
+
+### Customers
+- Create bookings on venue details page.
+- View upcoming bookings.
+- Update avatar/profile picture.
+
+### Venue Manager
+- Create, update and delete venues.
+- View bookings for their managed venues.
+- Update avatar/profile pictures.
+
+### Listings & Venues
+- Create venues with:
+  - Title
+  - Description
+  - Media Gallery
+  - Location
+  - Price per night
+  - Guest capacity
+  - Amenities
+- Real-time availability calendar with booked dates marked.
+- Search and browse all venues by title/location.
+
+## Built With
+- **Framework**: [Next.js 15.0.3](https://nextjs.org/)
+- **Typescript**: [Typescript^5](https://www.typescriptlang.org/)
+- **Zod**: [Zod^3.23.8](https://zod.dev/)
+- **UI Components**: [Shadcn ui](https://ui.shadcn.com/)
+- **CSS Framework**: [Tailwind CSS 3.4.1](https://tailwindcss.com/)
+- **Hosting Service**: [Vercel](https://vercel.com/)
+- **Design Tools**: Photoshop, Figma
+- **Planning Tool**: Notion
 
 ## Getting Started
+### Installing
+To get started with the project, follow these steps:
 
-First, run the development server:
+1. Clone the repository:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+   ```bash
+   git clone https://github.com/Motormary/nextjs-pe2-holidaze
+   ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Navigate to the project directory:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+   ```bash
+   cd nextjs-pe2-holidaze
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. Install dependencies
 
-## Learn More
+   ```bash
+    pnpm install
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+4. Rename the '.env.example' file inside the root oflder to '.env'
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+5. Use these values:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+  API_KEY=235c15a7-c0f5-4925-b6ec-59e3f4e2d081
 
-## Deploy on Vercel
+  API_BASE="https://v2.api.noroff.dev"
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Running
+To run the project locally:
+1. Start the development server:
+    ```bash
+    pnpm dev
+    ```
+
+2. Open your browser and visit [http://localhost:3000](http://localhost:3000).
