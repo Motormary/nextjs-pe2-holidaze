@@ -83,7 +83,7 @@ To get started with the project, follow these steps:
     pnpm install
    ```
 
-4. Rename the '.env.example' file inside the root oflder to '.env'
+4. Rename the '.env.example' file inside the root folder to '.env'
 
 5. Use these values:
 
